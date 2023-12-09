@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Botón cuando está presionado -->
+    <item android:drawable="@drawable/boton_presionado" android:state_pressed="true"/>
+    <!-- Botón cuando no está presionado -->
+    <item android:drawable="@drawable/boton_no_seleccionado"/>
+</selector>

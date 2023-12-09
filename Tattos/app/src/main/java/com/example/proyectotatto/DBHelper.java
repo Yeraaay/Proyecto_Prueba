@@ -18,6 +18,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static final String TABLE_USUARIOS="Usuarios";
     private static final String TABLE_REGISTRADOS = "Registrados";
+    private static final String TABLE_TATUAJES = "Tatuajes";
 
     public DBHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -49,7 +50,36 @@ public class DBHelper extends SQLiteOpenHelper {
                 "usuario_id INTEGER," +  // Nueva columna para la clave foránea
                 "FOREIGN KEY (usuario_id) REFERENCES " + TABLE_USUARIOS + "(id))");
 
+        db.execSQL("CREATE TABLE " + TABLE_TATUAJES + " (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "nombre TEXT," +
+                "imagen_resource_id INTEGER," +  // Puedes almacenar la referencia de la imagen
+                "categoria TEXT)");
 
+
+    }
+
+    // Método para agregar un tatuaje a la tabla
+    public long agregarTatuaje(String nombre, int imagenResId, String categoria) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("nombre", nombre);
+        values.put("imagen_resource_id", imagenResId);
+        values.put("categoria", categoria);
+
+        long id = db.insert(TABLE_TATUAJES, null, values);
+        db.close();
+        return id;
+    }
+
+    // Método para obtener los tatuajes por categoría
+    public Cursor obtenerTatuajesPorCategoria(String categoria) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = {"id", "nombre", "imagen_resource_id", "categoria"};
+        String selection = "categoria=?";
+        String[] selectionArgs = {categoria};
+
+        return db.query(TABLE_TATUAJES, columns, selection, selectionArgs, null, null, null);
     }
 
     public void createAdminUser(SQLiteDatabase db) {
