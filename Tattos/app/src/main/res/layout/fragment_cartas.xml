@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -15,10 +16,12 @@
             android:layout_height="wrap_content"
             android:columnCount="2"
             android:rowCount="4"
-            android:padding="8dp">
+            android:padding="8dp"
+            tools:ignore="UselessParent">
 
             <!-- Tarjeta 1 -->
             <androidx.cardview.widget.CardView
+                android:id="@+id/carta1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
@@ -50,6 +53,7 @@
 
             <!-- Tarjeta 2 -->
             <androidx.cardview.widget.CardView
+                android:id="@+id/carta2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
@@ -81,6 +85,7 @@
 
             <!-- Tarjeta 3 -->
             <androidx.cardview.widget.CardView
+                android:id="@+id/carta3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
@@ -112,6 +117,7 @@
 
             <!-- Tarjeta 4 -->
             <androidx.cardview.widget.CardView
+                android:id="@+id/carta4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"

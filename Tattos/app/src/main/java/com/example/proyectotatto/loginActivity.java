@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 public class loginActivity extends AppCompatActivity {
@@ -18,6 +20,8 @@ public class loginActivity extends AppCompatActivity {
     Button botonLogin;
     Button botonRegistrarse;
 
+    Button invitado;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +31,7 @@ public class loginActivity extends AppCompatActivity {
         contrasena = findViewById(R.id.contrasenaLogin);
         botonLogin = findViewById(R.id.btLogin);
         botonRegistrarse = findViewById(R.id.btRegister);
+        invitado = findViewById(R.id.botonInvitado);
 
         // Crear la base de datos y el usuario administrador al iniciar la actividad de login
         DBHelper dbhelper = new DBHelper(loginActivity.this);
@@ -71,5 +76,14 @@ public class loginActivity extends AppCompatActivity {
                 cursor.close();
             }
         });
+
+        invitado.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(loginActivity.this, invitadoActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 }

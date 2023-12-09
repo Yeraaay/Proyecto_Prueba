@@ -24,33 +24,94 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="413dp"
-        android:layout_height="78dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragmentContainerView">
-
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/fragmentContainerView"
         android:layout_width="match_parent"
         android:layout_height="670dp"
         android:background="@drawable/foto2"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/textView4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
         app:layout_constraintVertical_bias="1.0"
         tools:ignore="NotSibling">
 
-        <TextView
-            android:id="@+id/textView4"
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:background="#FA8072" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:layout_weight="0.1">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="bottom"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/botonCategoriaTodos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorGrisClaro"
+                        android:layout_marginLeft="10sp"
+                        android:text="Todos" />
+
+                    <Button
+                        android:id="@+id/botonCategoriaAnimales"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorGrisClaro"
+                        android:layout_marginLeft="10sp"
+                        android:text="Animales" />
+
+                    <Button
+                        android:id="@+id/botonCategoriaCriaturas"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorGrisClaro"
+                        android:layout_marginLeft="10sp"
+                        android:text="Criaturas" />
+
+                    <Button
+                        android:id="@+id/botonCategoriaPlantas"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorGrisClaro"
+                        android:layout_marginLeft="10sp"
+                        android:text="Plantas" />
+
+                    <Button
+                        android:id="@+id/botonCategoriaAnime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorGrisClaro"
+                        android:layout_marginLeft="10sp"
+                        android:text="Anime" />
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <FrameLayout
+                android:id="@+id/fragmentContainerView2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                android:layout_weight="1"></FrameLayout>
+        </LinearLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
