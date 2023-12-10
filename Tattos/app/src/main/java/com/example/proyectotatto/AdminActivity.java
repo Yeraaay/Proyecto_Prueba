@@ -8,7 +8,7 @@ import android.widget.Button;
 
 public class AdminActivity extends AppCompatActivity {
 
-    Button btnAñadir,btnMostrar,btnEliminar,btnModificar;
+    Button btnAniadir,btnMostrar,btnEliminar,btnModificar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,6 +16,8 @@ public class AdminActivity extends AppCompatActivity {
         setContentView(R.layout.activity_admin_prueba);
 
         btnMostrar = findViewById(R.id.botonMostrar);
+        btnAniadir = findViewById(R.id.botonAñadir);
+        btnEliminar = findViewById(R.id.botonEliminar);
 
         btnMostrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -24,13 +26,16 @@ public class AdminActivity extends AppCompatActivity {
             }
         });
 
-        btnAñadir = findViewById(R.id.botonAñadir);
-
-        btnAñadir.setOnClickListener(new View.OnClickListener() {
+        btnAniadir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mostrarFragmentAnadirProductoAdmin();
             }
+        });
+
+        btnEliminar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { mostrarFragmentEliminarProductoAdmin(); }
         });
 
 
@@ -61,6 +66,20 @@ public class AdminActivity extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.frameL, fragmentAnadirAdmin)
+                .addToBackStack(null)
+                .commit();
+
+    }
+
+    private void mostrarFragmentEliminarProductoAdmin(){
+        fragmentEliminarAdmin fragmentEliminarAdmin = new fragmentEliminarAdmin();
+
+        Bundle bundle = new Bundle();
+
+        fragmentEliminarAdmin.setArguments(bundle);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frameL, fragmentEliminarAdmin)
                 .addToBackStack(null)
                 .commit();
 

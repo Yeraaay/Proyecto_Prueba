@@ -53,7 +53,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + TABLE_TATUAJES + " (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "nombre TEXT," +
-                "imagen_resource_id BLOB," +
+                "imagen_resource_id String," +
                 "precio DOUBLE," +  // Asumiendo que el precio es un valor numérico (REAL)
                 "descripcion TEXT," +  // Añadiendo la columna para la descripción
                 "categoria TEXT)");

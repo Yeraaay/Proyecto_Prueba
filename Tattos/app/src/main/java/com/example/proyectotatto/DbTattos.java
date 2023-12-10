@@ -10,36 +10,27 @@ import java.util.ArrayList;
 
 public class DbTattos extends DBHelper {
 
-    Context context;
-
     public DbTattos(@Nullable Context context) {
         super(context);
-        this.context = context;
     }
 
     public ArrayList<Tatuaje> mostrarContactos() {
-        SQLiteDatabase db = getWritableDatabase(); // Utiliza el método de la clase padre
-
+        SQLiteDatabase db = getWritableDatabase();
         ArrayList<Tatuaje> listaTatuajes = new ArrayList<>();
-        Tatuaje contacto;
-        Cursor cursorTatto;
+        Tatuaje tatuaje;
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_TATUAJES + " ORDER BY nombre ASC", null);
 
-        cursorTatto = db.rawQuery("SELECT * FROM " + TABLE_TATUAJES + " ORDER BY nombre ASC", null);
-
-        if (cursorTatto.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
             do {
-                contacto = new Tatuaje();
-                contacto.setId(cursorTatto.getInt(0));
-                contacto.setNombre(cursorTatto.getString(1));
-                contacto.setImagen(cursorTatto.getString(2));
-                contacto.setCategoria(cursorTatto.getString(3));
-                listaTatuajes.add(contacto);
-            } while (cursorTatto.moveToNext());
+                tatuaje = new Tatuaje();
+                tatuaje.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
+                tatuaje.setNombre(cursor.getString(cursor.getColumnIndexOrThrow("nombre")));
+                tatuaje.setCategoria(cursor.getString(cursor.getColumnIndexOrThrow("categoria")));
+                tatuaje.setImagen(cursor.getString(cursor.getColumnIndexOrThrow("imagen_resource_id")));
+                listaTatuajes.add(tatuaje);
+            } while (cursor.moveToNext());
+            cursor.close();
         }
-
-        cursorTatto.close();
-
         return listaTatuajes;
     }
 }
-
