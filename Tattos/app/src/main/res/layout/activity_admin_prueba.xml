@@ -16,13 +16,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.042" />
+        app:layout_constraintVertical_bias="0.023" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="112dp"
+        android:layout_height="48dp"
+        android:text="Modificar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.866"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.21" />
 
     <Button
         android:id="@+id/button"
         android:layout_width="109dp"
         android:layout_height="48dp"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="72dp"
         android:text="Añadir"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.142"
@@ -39,7 +51,7 @@
         app:layout_constraintHorizontal_bias="0.854"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.135" />
+        app:layout_constraintVertical_bias="0.103" />
 
     <Button
         android:id="@+id/button3"
@@ -51,23 +63,11 @@
         app:layout_constraintHorizontal_bias="0.141"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.243" />
-
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="112dp"
-        android:layout_height="48dp"
-        android:text="Modificar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.866"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.242" />
+        app:layout_constraintVertical_bias="0.212" />
 
     <FrameLayout
-        android:layout_width="409dp"
-        android:layout_height="513dp"
+        android:layout_width="408dp"
+        android:layout_height="533dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">

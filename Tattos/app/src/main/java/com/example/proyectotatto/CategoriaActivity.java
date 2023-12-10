@@ -64,11 +64,11 @@ public class CategoriaActivity extends AppCompatActivity {
         Fragment fragment;
 
         if ("Animales".equals(categoria)) {
-            fragment = new FragmentAnimales();
+            fragment = new FragmentAnimalesInv();
         } else if ("Criaturas".equals(categoria)) {
-            fragment = new Fragment_criaturas();
+            fragment = new Fragment_criaturasInv();
         } else if ("Plantas".equals(categoria)) {
-            fragment = new Fragment_plantas();
+            fragment = new Fragment_plantasInv();
         } else {
             fragment = new FragmentCartas();
         }

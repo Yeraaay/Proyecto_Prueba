@@ -9,7 +9,7 @@ import android.widget.Button;
 
 public class invitadoActivity extends AppCompatActivity {
     private DBHelper dbHelper;
-    Fragment InicioFragment, CartasFragment, InteriorCartasFragment;
+    Fragment InicioFragment, CartasFragment;
     Button btnTodos, btnAnimales, btnCriaturas, btnPlantas, btnAnime;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +18,7 @@ public class invitadoActivity extends AppCompatActivity {
 
         InicioFragment = new InicioFragment();
         CartasFragment = new FragmentCartas();
-        InteriorCartasFragment = new InteriorCarta1();
+
 
         // Replace the default fragment with FragmentCartas
         getSupportFragmentManager().beginTransaction()
@@ -74,13 +74,13 @@ public class invitadoActivity extends AppCompatActivity {
         Fragment fragment;
 
         if ("Animales".equals(categoria)) {
-            fragment = new FragmentAnimales();
+            fragment = new FragmentAnimalesInv();
         } else if ("Criaturas".equals(categoria)) {
-            fragment = new Fragment_criaturas();
+            fragment = new Fragment_criaturasInv();
         } else if ("Plantas".equals(categoria)) {
-            fragment = new Fragment_plantas();
+            fragment = new Fragment_plantasInv();
         } else if ("Anime".equals(categoria)){
-            fragment = new fragment_anime();
+            fragment = new fragment_animeInv();
         } else {
             fragment =  new FragmentCartas();
         }

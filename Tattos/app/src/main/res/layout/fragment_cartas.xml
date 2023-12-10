@@ -21,12 +21,14 @@
 
             <!-- Tarjeta 1 -->
             <androidx.cardview.widget.CardView
-                android:id="@+id/carta1"
+                android:id="@+id/carta1Invitado"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
-                android:layout_margin="8dp">
+                android:layout_margin="8dp"
+                android:clickable="true"
+                >
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -53,12 +55,14 @@
 
             <!-- Tarjeta 2 -->
             <androidx.cardview.widget.CardView
-                android:id="@+id/carta2"
+                android:id="@+id/carta2Invitado"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
-                android:layout_margin="8dp">
+                android:layout_margin="8dp"
+                android:clickable="true"
+                >
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -85,12 +89,14 @@
 
             <!-- Tarjeta 3 -->
             <androidx.cardview.widget.CardView
-                android:id="@+id/carta3"
+                android:id="@+id/carta3Invitado"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
-                android:layout_margin="8dp">
+                android:layout_margin="8dp"
+                android:clickable="true"
+                >
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -117,12 +123,14 @@
 
             <!-- Tarjeta 4 -->
             <androidx.cardview.widget.CardView
-                android:id="@+id/carta4"
+                android:id="@+id/carta4Invitado"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
-                android:layout_margin="8dp">
+                android:layout_margin="8dp"
+                android:clickable="true"
+                >
 
                 <LinearLayout
                     android:layout_width="match_parent"
