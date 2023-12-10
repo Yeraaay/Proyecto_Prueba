@@ -5,6 +5,8 @@ public class Tatuaje {
     private String nombre;
     private String categoria;
     private String imagen;
+    private int precio;
+    private String descripcion;
 
     // Constructor
 
@@ -12,12 +14,13 @@ public class Tatuaje {
 
     }
 
-    public Tatuaje(long id, String nombre, String categoria, String imagen) {
+    public Tatuaje(long id, String nombre, String categoria, String imagen, int precio, String descripcion) {
         this.id = id;
         this.nombre = nombre;
         this.categoria = categoria;
-
         this.imagen = imagen;
+        this.precio = precio;
+        this.descripcion = descripcion;
     }
 
     // Getters y setters
@@ -52,5 +55,21 @@ public class Tatuaje {
 
     public void setImagen(String imagen) {
         this.imagen = imagen;
+    }
+
+    public int getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(int precio) {
+        this.precio = precio;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 }

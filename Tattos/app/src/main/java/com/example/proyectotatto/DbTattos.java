@@ -21,19 +21,21 @@ public class DbTattos extends DBHelper {
         SQLiteDatabase db = getWritableDatabase(); // Utiliza el método de la clase padre
 
         ArrayList<Tatuaje> listaTatuajes = new ArrayList<>();
-        Tatuaje contacto;
+        Tatuaje tatuaje;
         Cursor cursorTatto;
 
         cursorTatto = db.rawQuery("SELECT * FROM " + TABLE_TATUAJES + " ORDER BY nombre ASC", null);
 
         if (cursorTatto.moveToFirst()) {
             do {
-                contacto = new Tatuaje();
-                contacto.setId(cursorTatto.getInt(0));
-                contacto.setNombre(cursorTatto.getString(1));
-                contacto.setImagen(cursorTatto.getString(2));
-                contacto.setCategoria(cursorTatto.getString(3));
-                listaTatuajes.add(contacto);
+                tatuaje = new Tatuaje();
+                tatuaje.setId(cursorTatto.getInt(0));
+                tatuaje.setNombre(cursorTatto.getString(1));
+                tatuaje.setImagen(cursorTatto.getString(2));
+                tatuaje.setPrecio(cursorTatto.getInt(3));
+                tatuaje.setDescripcion(cursorTatto.getString(4));
+                tatuaje.setCategoria(cursorTatto.getString(5));
+                listaTatuajes.add(tatuaje);
             } while (cursorTatto.moveToNext());
         }
 
@@ -42,4 +44,3 @@ public class DbTattos extends DBHelper {
         return listaTatuajes;
     }
 }
-
