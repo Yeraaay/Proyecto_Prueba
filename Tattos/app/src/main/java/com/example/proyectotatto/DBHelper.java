@@ -63,6 +63,7 @@ public class DBHelper extends SQLiteOpenHelper {
         valuesTatuaje1.put("categoria", "criaturas");
         db.insert(TABLE_TATUAJES, null, valuesTatuaje1);
 
+
         ContentValues valuesTatuaje2 = new ContentValues();
         valuesTatuaje2.put("nombre", "FLOR");
         valuesTatuaje2.put("imagen_resource_id", R.drawable.flor1);
@@ -82,6 +83,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.insert(TABLE_TATUAJES, null, valuesTatuaje4);
 
     }
+
 
     public void createAdminUser(SQLiteDatabase db) {
         // Verificar si ya existe un usuario administrador

@@ -19,7 +19,7 @@
         app:layout_constraintVertical_bias="0.023" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/botonModificar"
         android:layout_width="112dp"
         android:layout_height="48dp"
         android:text="Modificar"
@@ -31,7 +31,7 @@
         app:layout_constraintVertical_bias="0.21" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/botonAñadir"
         android:layout_width="109dp"
         android:layout_height="48dp"
         android:layout_marginTop="72dp"
@@ -42,7 +42,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/botonMostrar"
         android:layout_width="108dp"
         android:layout_height="53dp"
         android:text="Mostrar"
@@ -54,7 +54,7 @@
         app:layout_constraintVertical_bias="0.103" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/botonEliminar"
         android:layout_width="108dp"
         android:layout_height="50dp"
         android:text="Eliminar"
@@ -66,7 +66,8 @@
         app:layout_constraintVertical_bias="0.212" />
 
     <FrameLayout
-        android:layout_width="408dp"
+        android:id="@+id/frameL"
+        android:layout_width="match_parent"
         android:layout_height="533dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
