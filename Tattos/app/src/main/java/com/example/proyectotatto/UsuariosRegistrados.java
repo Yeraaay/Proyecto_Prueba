@@ -36,7 +36,7 @@ public class UsuariosRegistrados extends AppCompatActivity {
         btnTodos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onCategoriaSelected("Todos");
+                new registradoFragmentCartas();
             }
         });
 
