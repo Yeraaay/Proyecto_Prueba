@@ -18,18 +18,19 @@ public class DbTattos extends DBHelper {
         SQLiteDatabase db = getWritableDatabase();
         ArrayList<Tatuaje> listaTatuajes = new ArrayList<>();
         Tatuaje tatuaje;
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_TATUAJES + " ORDER BY nombre ASC", null);
+        Cursor cursorTatto;
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 tatuaje = new Tatuaje();
-                tatuaje.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
-                tatuaje.setNombre(cursor.getString(cursor.getColumnIndexOrThrow("nombre")));
-                tatuaje.setCategoria(cursor.getString(cursor.getColumnIndexOrThrow("categoria")));
-                tatuaje.setImagen(cursor.getString(cursor.getColumnIndexOrThrow("imagen_resource_id")));
+                tatuaje.setId(cursorTatto.getInt(0));
+                tatuaje.setNombre(cursorTatto.getString(1));
+                tatuaje.setImagen(cursorTatto.getString(2));
+                tatuaje.setPrecio(cursorTatto.getInt(3));
+                tatuaje.setDescripcion(cursorTatto.getString(4));
+                tatuaje.setCategoria(cursorTatto.getString(5));
                 listaTatuajes.add(tatuaje);
-            } while (cursor.moveToNext());
-            cursor.close();
+            } while (cursorTatto.moveToNext());
         }
         return listaTatuajes;
     }

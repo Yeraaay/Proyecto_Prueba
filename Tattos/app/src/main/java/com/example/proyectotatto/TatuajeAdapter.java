@@ -1,7 +1,5 @@
 package com.example.proyectotatto;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 public class TatuajeAdapter extends RecyclerView.Adapter<TatuajeAdapter.ViewHolder> {
 
@@ -27,18 +22,21 @@ public class TatuajeAdapter extends RecyclerView.Adapter<TatuajeAdapter.ViewHold
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tatuaje,null,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tatuaje, parent, false);
         return new ViewHolder(view);
     }
 
-
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.viewNombre.setText(listaTatto.get(position).getNombre());
-        holder.viewCategoria.setText(listaTatto.get(position).getCategoria());
+        Tatuaje tatuaje = listaTatto.get(position);
+
+        holder.viewNombre.setText(tatuaje.getNombre());
+        holder.viewCategoria.setText(tatuaje.getCategoria());
+        holder.viewPrecio.setText(String.valueOf(tatuaje.getPrecio()));  // Agregar el precio
+        holder.viewDescripcion.setText(tatuaje.getDescripcion());  // Agregar la descripción
 
         // Obtener el nombre de la imagen desde el objeto Tatuaje
-        String nombreImagen = listaTatto.get(position).getImagen();
+        String nombreImagen = tatuaje.getImagen();
 
         // Obtener el ID del recurso drawable utilizando el nombre de la imagen
         int resourceId = holder.itemView.getContext().getResources().getIdentifier(
@@ -55,7 +53,7 @@ public class TatuajeAdapter extends RecyclerView.Adapter<TatuajeAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView viewNombre,viewCategoria;
+        TextView viewNombre, viewCategoria, viewPrecio, viewDescripcion;
         ImageView imagen;
 
         public ViewHolder(@NonNull View itemView) {
@@ -63,6 +61,8 @@ public class TatuajeAdapter extends RecyclerView.Adapter<TatuajeAdapter.ViewHold
 
             viewNombre = itemView.findViewById(R.id.nombreTextView);
             viewCategoria = itemView.findViewById(R.id.categoriaTextview);
+            viewPrecio = itemView.findViewById(R.id.precioTextView);  // Agregar el TextView para el precio
+            viewDescripcion = itemView.findViewById(R.id.descripcionTextView);  // Agregar el TextView para la descripción
             imagen = itemView.findViewById(R.id.imagenImageView);
         }
     }
