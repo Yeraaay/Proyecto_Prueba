@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,6 +46,16 @@ public class TatuajeAdapter extends RecyclerView.Adapter<TatuajeAdapter.ViewHold
 
         holder.imagen.setImageResource(resourceId);
 
+        // Agregar un OnClickListener a la tarjeta
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Al hacer clic en la tarjeta, iniciar la actividad de inicio de sesión
+                Intent intent = new Intent(holder.itemView.getContext(), loginActivity.class);
+                holder.itemView.getContext().startActivity(intent);
+                Toast.makeText(holder.itemView.getContext(), "Debes iniciar sesion para continuar", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
