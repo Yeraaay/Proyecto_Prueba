@@ -53,34 +53,45 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + TABLE_TATUAJES + " (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "nombre TEXT," +
-                "imagen_resource_id BLOB," +  // Puedes almacenar la referencia de la imagen
+                "imagen_resource_id BLOB," +
+                "precio DOUBLE," +  // Asumiendo que el precio es un valor numérico (REAL)
+                "descripcion TEXT," +  // Añadiendo la columna para la descripción
                 "categoria TEXT)");
+
 
 
         ContentValues valuesTatuaje1 = new ContentValues();
         valuesTatuaje1.put("nombre", "ONI");
         valuesTatuaje1.put("imagen_resource_id", R.drawable.oni1);
+        valuesTatuaje1.put("precio",20);
+        valuesTatuaje1.put("descripcion","Demonio de la cultura japonesa");
         valuesTatuaje1.put("categoria", "criaturas");
         db.insert(TABLE_TATUAJES, null, valuesTatuaje1);
-
 
         ContentValues valuesTatuaje2 = new ContentValues();
         valuesTatuaje2.put("nombre", "FLOR");
         valuesTatuaje2.put("imagen_resource_id", R.drawable.flor1);
+        valuesTatuaje2.put("precio", 50);  // Ajusta el valor del precio según sea necesario
+        valuesTatuaje2.put("descripcion", "Descripción de la flor");  // Ajusta la descripción según sea necesario
         valuesTatuaje2.put("categoria", "plantas");
         db.insert(TABLE_TATUAJES, null, valuesTatuaje2);
 
         ContentValues valuesTatuaje3 = new ContentValues();
         valuesTatuaje3.put("nombre", "SPIDER");
         valuesTatuaje3.put("imagen_resource_id", R.drawable.arana1);
+        valuesTatuaje3.put("precio", 25);  // Ajusta el valor del precio según sea necesario
+        valuesTatuaje3.put("descripcion", "Descripción de la araña");  // Ajusta la descripción según sea necesario
         valuesTatuaje3.put("categoria", "animales");
         db.insert(TABLE_TATUAJES, null, valuesTatuaje3);
 
         ContentValues valuesTatuaje4 = new ContentValues();
         valuesTatuaje4.put("nombre", "SNAKE");
         valuesTatuaje4.put("imagen_resource_id", R.drawable.serpiente1);
+        valuesTatuaje4.put("precio", 35);  // Ajusta el valor del precio según sea necesario
+        valuesTatuaje4.put("descripcion", "Descripción de la serpiente");  // Ajusta la descripción según sea necesario
         valuesTatuaje4.put("categoria", "animales");
         db.insert(TABLE_TATUAJES, null, valuesTatuaje4);
+
 
     }
 

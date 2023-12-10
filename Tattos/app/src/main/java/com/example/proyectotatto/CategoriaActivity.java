@@ -61,17 +61,9 @@ public class CategoriaActivity extends AppCompatActivity {
 
     public void onCategoriaSelected(String categoria) {
         // Crear un nuevo Fragment y pasar la categoría seleccionada como argumento
-        Fragment fragment;
+        Fragment fragment = null;
 
-        if ("Animales".equals(categoria)) {
-            fragment = new FragmentAnimalesInv();
-        } else if ("Criaturas".equals(categoria)) {
-            fragment = new Fragment_criaturasInv();
-        } else if ("Plantas".equals(categoria)) {
-            fragment = new Fragment_plantasInv();
-        } else {
-            fragment = new FragmentCartas();
-        }
+  
 
         // Reemplazar el fragmento solo una vez después de la estructura de control
         getSupportFragmentManager().beginTransaction()

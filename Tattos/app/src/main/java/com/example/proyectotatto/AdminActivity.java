@@ -24,8 +24,14 @@ public class AdminActivity extends AppCompatActivity {
             }
         });
 
+        btnAñadir = findViewById(R.id.botonAñadir);
 
-
+        btnAñadir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostrarFragmentAnadirProductoAdmin();
+            }
+        });
 
 
     }
@@ -36,14 +42,28 @@ public class AdminActivity extends AppCompatActivity {
 
         // Puedes pasar datos al fragmento si es necesario utilizando Bundle
         Bundle bundle = new Bundle();
-        // bundle.putString("Categoria", "TusDatos"); // Agrega datos si es necesario
+
         mostarProductoAdminFragment.setArguments(bundle);
 
         // Reemplaza el contenido actual del contenedor de fragmentos con el nuevo fragmento
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.frameL, mostarProductoAdminFragment)
-                .addToBackStack(null)  // Agrega a la pila de retroceso para permitir regresar
+                .addToBackStack(null)
                 .commit();
+    }
+
+    private void mostrarFragmentAnadirProductoAdmin(){
+        fragmentAnadirAdmin fragmentAnadirAdmin = new fragmentAnadirAdmin();
+
+        Bundle bundle = new Bundle();
+
+        fragmentAnadirAdmin.setArguments(bundle);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frameL, fragmentAnadirAdmin)
+                .addToBackStack(null)
+                .commit();
+
     }
 
 }
