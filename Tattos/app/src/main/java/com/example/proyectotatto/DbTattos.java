@@ -20,7 +20,9 @@ public class DbTattos extends DBHelper {
         Tatuaje tatuaje;
         Cursor cursorTatto;
 
-        if (cursor != null && cursor.moveToFirst()) {
+        cursorTatto = db.rawQuery("SELECT * FROM " + TABLE_TATUAJES + " ORDER BY nombre ASC", null);
+
+        if (cursorTatto.moveToFirst()) {
             do {
                 tatuaje = new Tatuaje();
                 tatuaje.setId(cursorTatto.getInt(0));

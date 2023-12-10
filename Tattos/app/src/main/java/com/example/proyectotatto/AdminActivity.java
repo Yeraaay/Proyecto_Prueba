@@ -18,30 +18,35 @@ public class AdminActivity extends AppCompatActivity {
         btnMostrar = findViewById(R.id.botonMostrar);
         btnAniadir = findViewById(R.id.botonAñadir);
         btnEliminar = findViewById(R.id.botonEliminar);
+        btnModificar = findViewById(R.id.botonModificar);
 
         btnMostrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mostrarFragmentoMostarProductoAdmin();
+                mostrarFragmentoMostarTatuajeAdmin();
             }
         });
 
         btnAniadir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mostrarFragmentAnadirProductoAdmin();
+                mostrarFragmentAnadirTatuajeAdmin();
             }
         });
 
         btnEliminar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { mostrarFragmentEliminarProductoAdmin(); }
+            public void onClick(View v) { mostrarFragmentEliminarTatuajeAdmin(); }
         });
 
+        btnModificar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { mostrarFragmentModificarTatuajeAdmin(); }
+        });
 
     }
 
-    private void mostrarFragmentoMostarProductoAdmin() {
+    private void mostrarFragmentoMostarTatuajeAdmin() {
         // Crea una instancia del fragmento
         MostarProductoAdmin mostarProductoAdminFragment = new MostarProductoAdmin();
 
@@ -57,7 +62,7 @@ public class AdminActivity extends AppCompatActivity {
                 .commit();
     }
 
-    private void mostrarFragmentAnadirProductoAdmin(){
+    private void mostrarFragmentAnadirTatuajeAdmin(){
         fragmentAnadirAdmin fragmentAnadirAdmin = new fragmentAnadirAdmin();
 
         Bundle bundle = new Bundle();
@@ -71,7 +76,7 @@ public class AdminActivity extends AppCompatActivity {
 
     }
 
-    private void mostrarFragmentEliminarProductoAdmin(){
+    private void mostrarFragmentEliminarTatuajeAdmin(){
         fragmentEliminarAdmin fragmentEliminarAdmin = new fragmentEliminarAdmin();
 
         Bundle bundle = new Bundle();
@@ -80,6 +85,20 @@ public class AdminActivity extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.frameL, fragmentEliminarAdmin)
+                .addToBackStack(null)
+                .commit();
+
+    }
+
+    private void mostrarFragmentModificarTatuajeAdmin(){
+        fragmentObtenerIdModificar fragmentObtenerIdModificar = new fragmentObtenerIdModificar();
+
+        Bundle bundle = new Bundle();
+
+        fragmentObtenerIdModificar.setArguments(bundle);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frameL, fragmentObtenerIdModificar)
                 .addToBackStack(null)
                 .commit();
 

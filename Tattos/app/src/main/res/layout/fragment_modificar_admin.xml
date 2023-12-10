@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:windowSoftInputMode="adjustResize"
+    android:padding="16dp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="16dp">
+
+    <EditText
+        android:id="@+id/nombreModificar"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="30dp"
+        android:alpha="0.7"
+        android:background="@drawable/bordes"
+        android:ems="10"
+        android:hint="Modificar Nombre"
+        android:inputType="text"
+        android:paddingStart="10dp" />
+
+    <EditText
+        android:id="@+id/precioModificar"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginBottom="30dp"
+        android:alpha="0.7"
+        android:background="@drawable/bordes"
+        android:ems="10"
+        android:hint="Modificar Precio"
+        android:inputType="text"
+        android:paddingStart="10dp" />
+
+    <EditText
+        android:id="@+id/descripcionModificar"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginBottom="30dp"
+        android:alpha="0.7"
+        android:background="@drawable/bordes"
+        android:ems="10"
+        android:hint="Modificar Descripción"
+        android:inputType="text"
+        android:paddingStart="10dp" />
+
+    <EditText
+        android:id="@+id/categoriaModificar"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginBottom="30dp"
+        android:alpha="0.7"
+        android:background="@drawable/bordes"
+        android:ems="10"
+        android:hint="Modificar Categoría"
+        android:inputType="text"
+        android:paddingStart="10dp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/botonSeleccionarImagen"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:textStyle="bold"
+        android:background="@drawable/bordes"
+        android:text="Modificar Imagen" />
+
+    <ImageView
+        android:id="@+id/imagenModificar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="45dp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/botonModificarTatuaje"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:background="@drawable/boton_custom1"
+        android:text="Modificar Imagen" />
+</LinearLayout>
+</ScrollView>
+</LinearLayout>
