@@ -32,9 +32,5 @@
             android:name=".invitadoActivity"
             android:exported="false">
         </activity>
-        <activity
-            android:name=".CategoriaActivity"
-            android:exported="false">
-        </activity>
     </application>
 </manifest>

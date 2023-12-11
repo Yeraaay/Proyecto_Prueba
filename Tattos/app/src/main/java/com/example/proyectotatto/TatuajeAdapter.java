@@ -1,5 +1,6 @@
 package com.example.proyectotatto;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -10,6 +11,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -17,11 +21,11 @@ import java.util.ArrayList;
 public class TatuajeAdapter extends RecyclerView.Adapter<TatuajeAdapter.ViewHolder> {
 
     private ArrayList<Tatuaje> listaTatto;
+    private String fragmentType;
 
-
-    public TatuajeAdapter(ArrayList<Tatuaje> listaTattos) {
+    public TatuajeAdapter(ArrayList<Tatuaje> listaTattos,String fragmentType) {
         this.listaTatto = listaTattos;
-
+        this.fragmentType = fragmentType;
     }
 
     @NonNull
@@ -32,7 +36,7 @@ public class TatuajeAdapter extends RecyclerView.Adapter<TatuajeAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Tatuaje tatuaje = listaTatto.get(position);
 
         holder.viewNombre.setText(tatuaje.getNombre());
@@ -50,10 +54,21 @@ public class TatuajeAdapter extends RecyclerView.Adapter<TatuajeAdapter.ViewHold
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Al hacer clic en la tarjeta, iniciar la actividad de inicio de sesión
-                Intent intent = new Intent(holder.itemView.getContext(), loginActivity.class);
-                holder.itemView.getContext().startActivity(intent);
-                Toast.makeText(holder.itemView.getContext(), "Debes iniciar sesion para continuar", Toast.LENGTH_SHORT).show();
+                String categoria = tatuaje.getNombre();
+
+                // Lógica condicional según el fragmento
+                if ("FragmentCartas".equals(fragmentType)) {
+                    Intent intent = new Intent(holder.itemView.getContext(), loginActivity.class);
+                    holder.itemView.getContext().startActivity(intent);
+                    Toast.makeText(holder.itemView.getContext(), "Debes iniciar sesion para continuar", Toast.LENGTH_SHORT).show();
+                } else if ("registradoFragmentCartas".equals(fragmentType) && "ONI".equals(categoria)) {
+                    // Reemplazar el fragmento actual con interiorCarta1
+                    FragmentManager fragmentManager = ((AppCompatActivity) holder.itemView.getContext()).getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.fragmentContainerView2, new InteriorCarta1());
+                    fragmentTransaction.addToBackStack(null);  // Para permitir retroceder al fragmento anterior
+                    fragmentTransaction.commit();
+                }
             }
         });
     }

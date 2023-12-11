@@ -34,8 +34,8 @@ public class FragmentCartas extends Fragment {
         // Obtén la lista de todos los tatuajes desde la base de datos
         ArrayList<Tatuaje> tatuajeList = dbTattos.mostrarContactos();
 
-        // Crea un adaptador y configúralo con la lista de tatuajes
-        tatuajeAdapter = new TatuajeAdapter(tatuajeList);
+        // Crea un adaptador y configúralo con la lista de tatuajes y el tipo de fragmento
+        tatuajeAdapter = new TatuajeAdapter(tatuajeList,"FragmentCartas");
 
         // Establece el adaptador en el RecyclerView
         recyclerView.setAdapter(tatuajeAdapter);

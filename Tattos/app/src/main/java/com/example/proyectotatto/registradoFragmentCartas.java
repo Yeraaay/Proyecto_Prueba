@@ -9,10 +9,14 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -23,56 +27,51 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class registradoFragmentCartas extends Fragment {
 
-    TextView tvTatuajes;
-    DBHelper dbHelper;
+    private RecyclerView recyclerView;
+    private TatuajeAdapter tatuajeAdapter;
+    private DbTattos dbTattos;
 
-
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_registrado_cartas, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_registrado_cartas, container, false);
 
-        tvTatuajes = root.findViewById(R.id.textViewTatuajes);
+        recyclerView = view.findViewById(R.id.recicleRegistrado);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        dbHelper = new DBHelper(getActivity());
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        // Crea una instancia de DbTattos utilizando el contexto del fragmento
+        dbTattos = new DbTattos(getContext());
 
-        String queryTodos = "SELECT * FROM " + DBHelper.TABLE_TATUAJES;
-        Cursor cursor = db.rawQuery(queryTodos, null);
+        // Obtén la lista de todos los tatuajes desde la base de datos
+        ArrayList<Tatuaje> tatuajeList = dbTattos.mostrarContactos();
 
-        SpannableStringBuilder stringBuilder = new SpannableStringBuilder();
+        // Crea un adaptador y configúralo con la lista de tatuajes y el tipo de fragmento
+        tatuajeAdapter = new TatuajeAdapter(tatuajeList,"registradoFragmentCartas");
 
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                String nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre"));
-                byte[] imagenEnBytes = cursor.getBlob(cursor.getColumnIndexOrThrow("imagen_resource_id"));
+        // Establece el adaptador en el RecyclerView
+        recyclerView.setAdapter(tatuajeAdapter);
 
-                Bitmap imagenBitmap = BitmapFactory.decodeByteArray(imagenEnBytes, 0, imagenEnBytes.length);
-                Drawable drawable = new BitmapDrawable(getResources(), imagenBitmap);
+        return view;
+    }
 
-                // Agregar el nombre al builder
-                stringBuilder.append("Nombre: ").append(nombre).append("\n");
+    // Método para cambiar la categoría y actualizar la lista de tatuajes
+    public void cambiarCategoriaR(String nuevaCategoria) {
+        ArrayList<Tatuaje> tatuajeList;
 
-                // Agregar la imagen al builder
-                if (imagenBitmap != null) {
-                    drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-
-                    ImageSpan imageSpan = new ImageSpan(drawable, ImageSpan.ALIGN_BASELINE);
-                    SpannableString spannableString = new SpannableString("Imagen: ");
-                    spannableString.setSpan(imageSpan, 0, spannableString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                    stringBuilder.append(spannableString).append("\n");
-                }
-            } while (cursor.moveToNext());
-
-            cursor.close();
+        // Si la categoría es "Todos", muestra todos los tatuajes
+        if (nuevaCategoria.equals("Todos")) {
+            tatuajeList = dbTattos.mostrarContactos();
+        } else {
+            // Si la categoría no es "Todos", filtra por la categoría seleccionada
+            tatuajeList = dbTattos.obtenerTatuajesPorCategoria(nuevaCategoria);
         }
 
-        tvTatuajes.setText(stringBuilder);
-
-        return root;
+        // Actualiza el adaptador con la nueva lista de tatuajes
+        tatuajeAdapter.actualizarLista(tatuajeList);
     }
 
 }

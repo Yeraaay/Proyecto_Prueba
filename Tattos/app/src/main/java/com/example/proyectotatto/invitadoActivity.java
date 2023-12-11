@@ -61,14 +61,14 @@ public class invitadoActivity extends AppCompatActivity {
         // Mostrar el fragmento inicial solo si savedInstanceState es nulo
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentContainerView2, new FragmentCartas())
+                    .replace(R.id.fragmentContainerView1, new FragmentCartas())
                     .commit();
         }
     }
 
     public void onCategoriaSelected(String categoria) {
         // Obtener el fragmento actual
-        FragmentCartas fragment = (FragmentCartas) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView2);
+        FragmentCartas fragment = (FragmentCartas) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView1);
 
         // Verificar si el fragmento es nulo
         if (fragment != null) {

@@ -32,7 +32,7 @@ public class MostarProductoAdmin extends Fragment {
 
         tatuajeList = new ArrayList<>();
 
-        TatuajeAdapter tatuajeAdapter = new TatuajeAdapter(dbTattos.mostrarContactos());
+        TatuajeAdapter tatuajeAdapter = new TatuajeAdapter(dbTattos.mostrarContactos(),"Admin");
         recyclerView.setAdapter(tatuajeAdapter);
 
         return view;

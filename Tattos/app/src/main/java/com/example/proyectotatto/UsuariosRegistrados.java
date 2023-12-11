@@ -9,8 +9,6 @@ import android.widget.Button;
 
 public class UsuariosRegistrados extends AppCompatActivity {
 
-    private DBHelper dbHelper;
-    Fragment registradoCartas;
     Button btnTodos, btnAnimales, btnCriaturas, btnPlantas, btnAnime;
 
     @Override
@@ -18,67 +16,66 @@ public class UsuariosRegistrados extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_usuarios_registrados);
 
-        registradoCartas = new registradoFragmentCartas();
-
-        // Replace the default fragment with FragmentCartas
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragmentContainerView2, registradoCartas)
-                .commit();
-
-        dbHelper = new DBHelper(this);
-
+        // Inicializar los botones
         btnTodos = findViewById(R.id.botonCategoriaTodos);
         btnAnimales = findViewById(R.id.botonCategoriaAnimales);
         btnCriaturas = findViewById(R.id.botonCategoriaCriaturas);
         btnPlantas = findViewById(R.id.botonCategoriaPlantas);
         btnAnime = findViewById(R.id.botonCategoriaAnime);
 
+        // Manejar clics en los botones
         btnTodos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new registradoFragmentCartas();
+                onCategoriaSelected("Todos");
             }
         });
 
         btnAnimales.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onCategoriaSelected("Animales");
+                onCategoriaSelected("animales");
             }
         });
 
         btnCriaturas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onCategoriaSelected("Criaturas");
+                onCategoriaSelected("criaturas");
             }
         });
 
         btnPlantas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onCategoriaSelected("Plantas");
+                onCategoriaSelected("plantas");
             }
         });
 
         btnAnime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onCategoriaSelected("Anime");
+                onCategoriaSelected("anime");
             }
         });
 
+        // Mostrar el fragmento inicial solo si savedInstanceState es nulo
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragmentContainerView2, new registradoFragmentCartas())
+                    .commit();
+        }
     }
 
     public void onCategoriaSelected(String categoria) {
-        // Crear un nuevo Fragment y pasar la categoría seleccionada como argumento
-        Fragment fragment = null;
+        // Obtener el fragmento actual
+        registradoFragmentCartas fragment = (registradoFragmentCartas) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView2);
 
-
-        // Reemplazar el fragmento solo una vez después de la estructura de control
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragmentContainerView2, fragment)
-                .commit();
+        // Verificar si el fragmento es nulo
+        if (fragment != null) {
+            // Llamar al método en el fragmento para cambiar la categoría
+            fragment.cambiarCategoriaR(categoria);
+        }
     }
 
 }
