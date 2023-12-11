@@ -6,34 +6,27 @@
     android:layout_height="match_parent"
     tools:context=".fragmentEliminarAdmin">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
         <EditText
             android:id="@+id/botonEliminarTatuaje"
-            android:layout_width="282dp"
-            android:layout_height="48dp"
+            android:layout_width="220dp"
+            android:layout_height="50dp"
             android:ems="10"
+            android:layout_marginTop="150dp"
             android:hint="Nombre Tatuaje a eliminar"
-            android:inputType="text"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.496"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.239" />
+            android:inputType="text" />
 
         <Button
             android:id="@+id/botonEliminacionTatuaje"
-            android:layout_width="140dp"
-            android:layout_height="48dp"
-            android:text="Eliminar"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.457" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="45dp"
+            android:background="@drawable/boton_custom1"
+            android:text="Eliminar Tatuaje" />
+    </LinearLayout>
 </FrameLayout>
