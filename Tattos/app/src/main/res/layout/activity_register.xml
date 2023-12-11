@@ -46,7 +46,7 @@
                 android:layout_marginLeft="21dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Tattoo"
+                android:text="Cattoo"
                 android:textColor="@color/colorNegro"
                 android:textSize="55dp"
                 android:textStyle="bold" />

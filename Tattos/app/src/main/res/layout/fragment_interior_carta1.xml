@@ -6,116 +6,85 @@
     android:layout_height="match_parent"
     tools:context=".InteriorCarta1">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
 
-        <Button
-            android:id="@+id/botonCarrito"
-            android:layout_width="275dp"
-            android:layout_height="55dp"
-            android:layout_marginBottom="48dp"
-            android:text="Añadir al carrito"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textView13"
-            android:layout_width="314dp"
-            android:layout_height="104dp"
-            android:layout_marginStart="84dp"
-            android:gravity="center"
-            android:text="Descripcion: Un oni es una criatura demoníaca de la mitología japonesa, a menudo representada con cuernos, colmillos afilados y una apariencia feroz."
-            android:textSize="16sp"
-            android:textColor="#FF00FF"
-            android:textStyle="bold"
-            android:shadowColor="#FF00FF"
-            android:shadowDx="0"
-            android:shadowDy="0"
-            android:shadowRadius="10"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView10"
-            app:layout_constraintVertical_bias="0.052" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.4"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textView7"
-            android:layout_width="283dp"
-            android:layout_height="300dp"
-            android:background="@drawable/tarjetasbotones"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.509"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.065" />
+            <TextView
+                android:id="@+id/textViewOni"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/oni1" />
 
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="273dp"
-            android:layout_height="270dp"
-            android:background="@drawable/oni1"
-            app:layout_constraintBottom_toBottomOf="@+id/textView7"
-            app:layout_constraintEnd_toEndOf="@+id/textView7"
-            app:layout_constraintStart_toStartOf="@+id/textView7"
-            app:layout_constraintTop_toTopOf="@+id/textView7"
-            app:layout_constraintVertical_bias="0.3" />
+            <TextView
+                android:id="@+id/textViewDescripción"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="21dp"
+                android:paddingHorizontal="30dp"
+                android:text="Un oni es una criatura demoníaca de la mitología japonesa, a menudo representada con cuernos, colmillos afilados y una apariencia feroz."
+                android:textColor="@color/colorNegro"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/textView10"
-            android:layout_width="309dp"
-            android:layout_height="34dp"
-            android:layout_marginTop="12dp"
-            android:gravity="center"
-            android:text="Seductora Tentación"
-            android:textSize="24sp"
-            android:textColor="#FF00FF"
-            android:textStyle="bold"
-            android:shadowColor="#FF00FF"
-            android:shadowDx="0"
-            android:shadowDy="0"
-            android:shadowRadius="10"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView7" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal|center"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/textView15"
-            android:layout_width="181dp"
-            android:layout_height="51dp"
-            android:gravity="center"
-            android:text="20€"
-            android:textSize="28sp"
-            android:textColor="#FF00FF"
-            android:textStyle="bold"
-            android:shadowColor="#FF00FF"
-            android:shadowDx="0"
-            android:shadowDy="0"
-            android:shadowRadius="10"
-            app:layout_constraintBottom_toTopOf="@+id/botonCarrito"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.721"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView13"
-            app:layout_constraintVertical_bias="0.358" />
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Precio: "
+                android:textSize="20dp"
+                android:layout_marginRight="30dp"
+                android:textColor="@color/colorNegro"
+                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/textView16"
-            android:layout_width="132dp"
-            android:layout_height="49dp"
-            android:layout_marginStart="56dp"
-            android:gravity="center"
-            android:text="Precio:"
-            android:textColor="#FF00FF"
-            android:textStyle="bold"
-            android:shadowColor="#FF00FF"
-            android:shadowDx="0"
-            android:shadowDy="0"
-            android:shadowRadius="10"
-            app:layout_constraintBottom_toTopOf="@+id/botonCarrito"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView13"
-            app:layout_constraintVertical_bias="0.353" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="7dp"
+                android:text="20€"
+                android:shadowColor="@color/colorRojoOscuro"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="2"
+                android:textColor="@color/colorNegro"
+                android:textSize="45dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal|center"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/botonCarrito"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/boton_custom1"
+                android:textStyle="bold"
+                android:text="Añadir al carrito" />
+        </LinearLayout>
+    </LinearLayout>
+
 </FrameLayout>
