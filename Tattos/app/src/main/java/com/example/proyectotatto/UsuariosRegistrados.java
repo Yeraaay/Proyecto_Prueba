@@ -1,13 +1,15 @@
 package com.example.proyectotatto;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import androidx.fragment.app.Fragment;
 
-public class UsuariosRegistrados extends AppCompatActivity {
+import com.example.proyectotatto.OnCategoriaSelectedListener;
+
+public class UsuariosRegistrados extends AppCompatActivity implements OnCategoriaSelectedListener {
 
     Button btnTodos, btnAnimales, btnCriaturas, btnPlantas, btnAnime;
 
@@ -65,17 +67,27 @@ public class UsuariosRegistrados extends AppCompatActivity {
                     .replace(R.id.fragmentContainerView2, new registradoFragmentCartas())
                     .commit();
         }
+
+        // Asegúrate de establecer el listener en el fragmento cuando lo creas o cuando sea apropiado
+        // Por ejemplo, después de instanciar InteriorCarta1 en algún lugar de tu código
+        InteriorCarta1 interiorCarta1Fragment = new InteriorCarta1();
+        interiorCarta1Fragment.setOnCategoriaSelectedListener(this);
     }
 
+    @Override
     public void onCategoriaSelected(String categoria) {
         // Obtener el fragmento actual
-        registradoFragmentCartas fragment = (registradoFragmentCartas) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView2);
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView2);
 
-        // Verificar si el fragmento es nulo
-        if (fragment != null) {
-            // Llamar al método en el fragmento para cambiar la categoría
-            fragment.cambiarCategoriaR(categoria);
+        // Verificar si el fragmento es nulo y es de tipo registradoFragmentCartas
+        if (currentFragment instanceof registradoFragmentCartas) {
+            // Realizar el casting y llamar al método en el fragmento para cambiar la categoría
+            registradoFragmentCartas fragmentCartas = (registradoFragmentCartas) currentFragment;
+            fragmentCartas.cambiarCategoriaR(categoria);
+        } else {
+            // Manejar la situación cuando el fragmento actual no es del tipo esperado
+            Log.e("UsuariosRegistrados", "El fragmento actual no es de tipo registradoFragmentCartas");
+            // Puedes agregar un manejo específico o lanzar una excepción según tus necesidades
         }
     }
-
 }
