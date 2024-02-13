@@ -84,6 +84,22 @@ public class InteriorCarta1 extends Fragment {
             imagen.setImageResource(R.drawable.serpiente1);
             descrip.setText(tatuaje.getDescripcion());
             precio.setText(String.valueOf(tatuaje.getPrecio()));
+        } else if ("GRIFO".equals(nombreTatuajeE)) {
+            imagen.setImageResource(R.drawable.grifo);
+            descrip.setText(tatuaje.getDescripcion());
+            precio.setText(String.valueOf(tatuaje.getPrecio()));
+        } else if ("MARIHUANA".equals(nombreTatuajeE)) {
+            imagen.setImageResource(R.drawable.marihuana);
+            descrip.setText(tatuaje.getDescripcion());
+            precio.setText(String.valueOf(tatuaje.getPrecio()));
+        } else if ("GOKU".equals(nombreTatuajeE)) {
+            imagen.setImageResource(R.drawable.goku);
+            descrip.setText(tatuaje.getDescripcion());
+            precio.setText(String.valueOf(tatuaje.getPrecio()));
+        } else if ("NARUTO".equals(nombreTatuajeE)) {
+            imagen.setImageResource(R.drawable.naruto);
+            descrip.setText(tatuaje.getDescripcion());
+            precio.setText(String.valueOf(tatuaje.getPrecio()));
         }
     }
 }

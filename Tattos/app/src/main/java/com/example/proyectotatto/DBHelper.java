@@ -59,7 +59,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "categoria TEXT)");
 
 
-
+        //Criatura
         ContentValues valuesTatuaje1 = new ContentValues();
         valuesTatuaje1.put("nombre", "ONI");
         valuesTatuaje1.put("imagen_resource_id", R.drawable.oni1);
@@ -68,6 +68,7 @@ public class DBHelper extends SQLiteOpenHelper {
         valuesTatuaje1.put("categoria", "criaturas");
         db.insert(TABLE_TATUAJES, null, valuesTatuaje1);
 
+        //Planta
         ContentValues valuesTatuaje2 = new ContentValues();
         valuesTatuaje2.put("nombre", "FLOR");
         valuesTatuaje2.put("imagen_resource_id", R.drawable.flor1);
@@ -76,6 +77,7 @@ public class DBHelper extends SQLiteOpenHelper {
         valuesTatuaje2.put("categoria", "plantas");
         db.insert(TABLE_TATUAJES, null, valuesTatuaje2);
 
+        //Animal
         ContentValues valuesTatuaje3 = new ContentValues();
         valuesTatuaje3.put("nombre", "SPIDER");
         valuesTatuaje3.put("imagen_resource_id", R.drawable.arana1);
@@ -84,6 +86,7 @@ public class DBHelper extends SQLiteOpenHelper {
         valuesTatuaje3.put("categoria", "animales");
         db.insert(TABLE_TATUAJES, null, valuesTatuaje3);
 
+        //Animal
         ContentValues valuesTatuaje4 = new ContentValues();
         valuesTatuaje4.put("nombre", "SNAKE");
         valuesTatuaje4.put("imagen_resource_id", R.drawable.serpiente1);
@@ -92,6 +95,41 @@ public class DBHelper extends SQLiteOpenHelper {
         valuesTatuaje4.put("categoria", "animales");
         db.insert(TABLE_TATUAJES, null, valuesTatuaje4);
 
+        //Criatura
+        ContentValues valuesTatuaje5 = new ContentValues();
+        valuesTatuaje5.put("nombre", "GRIFO");
+        valuesTatuaje5.put("imagen_resource_id", R.drawable.grifo);
+        valuesTatuaje5.put("precio", 45);  // Ajusta el valor del precio según sea necesario
+        valuesTatuaje5.put("descripcion", "Descripción del Grifo");  // Ajusta la descripción según sea necesario
+        valuesTatuaje5.put("categoria", "criaturas");
+        db.insert(TABLE_TATUAJES, null, valuesTatuaje5);
+
+        //Planta
+        ContentValues valuesTatuaje6 = new ContentValues();
+        valuesTatuaje6.put("nombre", "MARIHUANA");
+        valuesTatuaje6.put("imagen_resource_id", R.drawable.marihuana);
+        valuesTatuaje6.put("precio", 25);  // Ajusta el valor del precio según sea necesario
+        valuesTatuaje6.put("descripcion", "Descripción de la marihuana");  // Ajusta la descripción según sea necesario
+        valuesTatuaje6.put("categoria", "plantas");
+        db.insert(TABLE_TATUAJES, null, valuesTatuaje6);
+
+        //Anime
+        ContentValues valuesTatuaje7 = new ContentValues();
+        valuesTatuaje7.put("nombre", "GOKU");
+        valuesTatuaje7.put("imagen_resource_id", R.drawable.goku);
+        valuesTatuaje7.put("precio", 50);  // Ajusta el valor del precio según sea necesario
+        valuesTatuaje7.put("descripcion", "Descripción de Goku");  // Ajusta la descripción según sea necesario
+        valuesTatuaje7.put("categoria", "anime");
+        db.insert(TABLE_TATUAJES, null, valuesTatuaje7);
+
+        //Anime
+        ContentValues valuesTatuaje8 = new ContentValues();
+        valuesTatuaje8.put("nombre", "NARUTO");
+        valuesTatuaje8.put("imagen_resource_id", R.drawable.naruto);
+        valuesTatuaje8.put("precio", 50);  // Ajusta el valor del precio según sea necesario
+        valuesTatuaje8.put("descripcion", "Descripción de Naruto");  // Ajusta la descripción según sea necesario
+        valuesTatuaje8.put("categoria", "anime");
+        db.insert(TABLE_TATUAJES, null, valuesTatuaje8);
 
     }
 
@@ -128,7 +166,7 @@ public class DBHelper extends SQLiteOpenHelper {
         // Añade las condiciones para actualizar según la versión de la base de datos
         if (oldVersion < 2) {
             // Ejecuta las consultas de actualización necesarias
-            db.execSQL("ALTER TABLE " + TABLE_REGISTRADOS + " ADD COLUMN nuevoCampo TEXT;");
+            db.execSQL("ALTER TABLE " + TABLE_REGISTRADOS + " ADD COLUMN nuevaColumna TEXT;");
         }
 
         // Puedes agregar más bloques if para otras versiones, si es necesario
