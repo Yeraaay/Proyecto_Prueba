@@ -1,7 +1,9 @@
 package com.example.proyectotatto;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -65,6 +67,7 @@ public class loginActivity extends AppCompatActivity {
                         startActivity(intent1);
                     } else if ("Registrado".equals(tipoUsuario)) {
                         Intent intent2 = new Intent(loginActivity.this, UsuariosRegistrados.class);
+                        guardarDatosUsuario(contrasenaUsuario);
                         startActivity(intent2);
                     }
 
@@ -86,4 +89,12 @@ public class loginActivity extends AppCompatActivity {
         });
 
     }
+
+    private void guardarDatosUsuario(String contrasena) {
+        SharedPreferences sharedPreferences = getSharedPreferences("datos_usuario", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("contrasena", contrasena);
+        editor.apply();
+    }
+
 }

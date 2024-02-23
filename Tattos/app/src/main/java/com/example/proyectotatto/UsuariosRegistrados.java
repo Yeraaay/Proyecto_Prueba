@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.content.Intent;
 import androidx.fragment.app.Fragment;
 
 import com.example.proyectotatto.OnCategoriaSelectedListener;
@@ -12,6 +14,7 @@ import com.example.proyectotatto.OnCategoriaSelectedListener;
 public class UsuariosRegistrados extends AppCompatActivity implements OnCategoriaSelectedListener {
 
     Button btnTodos, btnAnimales, btnCriaturas, btnPlantas, btnAnime;
+    ImageButton btnPerfil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +27,7 @@ public class UsuariosRegistrados extends AppCompatActivity implements OnCategori
         btnCriaturas = findViewById(R.id.botonCategoriaCriaturas);
         btnPlantas = findViewById(R.id.botonCategoriaPlantas);
         btnAnime = findViewById(R.id.botonCategoriaAnime);
+        btnPerfil = findViewById(R.id.imageButton);
 
         // Manejar clics en los botones
         btnTodos.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +64,13 @@ public class UsuariosRegistrados extends AppCompatActivity implements OnCategori
                 onCategoriaSelected("anime");
             }
         });
+        btnPerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UsuariosRegistrados.this, EditarPerfil.class);
+                startActivity(intent);
+            }
+        });
 
         // Mostrar el fragmento inicial solo si savedInstanceState es nulo
         if (savedInstanceState == null) {
@@ -73,6 +84,8 @@ public class UsuariosRegistrados extends AppCompatActivity implements OnCategori
         InteriorCarta1 interiorCarta1Fragment = new InteriorCarta1();
         interiorCarta1Fragment.setOnCategoriaSelectedListener(this);
     }
+
+
 
     @Override
     public void onCategoriaSelected(String categoria) {
