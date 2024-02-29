@@ -87,7 +87,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 "usuario_id" + " INTEGER," +
                 "nombresTatuajes" + " TEXT);");
 
-
         //Criatura
         ContentValues valuesTatuaje1 = new ContentValues();
         valuesTatuaje1.put("nombre", "ONI");
@@ -436,7 +435,7 @@ public class DBHelper extends SQLiteOpenHelper {
         if (oldVersion < 2) {
             // Ejecuta las consultas de actualización necesarias
             db.execSQL("ALTER TABLE " + TABLE_REGISTRADOS + " ADD COLUMN nuevaColumna TEXT;");
-
+        
             // Agrega la columna para el identificador único del carrito
             db.execSQL("ALTER TABLE " + TABLE_CARRITO + " ADD COLUMN carrito_id INTEGER;");
         }
@@ -444,4 +443,4 @@ public class DBHelper extends SQLiteOpenHelper {
         // Siempre asegúrate de llamar al onCreate al final para recrear la tabla si es necesario
         onCreate(db);
     }
-}
+    }

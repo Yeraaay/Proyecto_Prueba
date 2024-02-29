@@ -70,6 +70,13 @@ public class UsuariosRegistrados extends AppCompatActivity implements OnCategori
                 onCategoriaSelected("anime");
             }
         });
+        btnPerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UsuariosRegistrados.this, EditarPerfil.class);
+                startActivity(intent);
+            }
+        });
 
         btnPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,6 +136,7 @@ public class UsuariosRegistrados extends AppCompatActivity implements OnCategori
             // Puedes agregar un manejo específico o lanzar una excepción según tus necesidades
         }
     }
+}
 
 
     public void setOnMenuButtonClickListener(OnMenuButtonClickListener listener) {
