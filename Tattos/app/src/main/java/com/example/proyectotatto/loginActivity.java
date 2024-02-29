@@ -7,10 +7,12 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -67,13 +69,15 @@ public class loginActivity extends AppCompatActivity {
                         startActivity(intent1);
                     } else if ("Registrado".equals(tipoUsuario)) {
                         Intent intent2 = new Intent(loginActivity.this, UsuariosRegistrados.class);
-                        guardarDatosUsuario(contrasenaUsuario);
+                        intent2.putExtra("nombreUsuario", nombreUsuario);
+                        intent2.putExtra("contrasenaUsuario", contrasenaUsuario);
+                        @SuppressLint("Range") long idUsuario = cursor.getLong(cursor.getColumnIndex("id"));
+                        establecerIdUsuarioActual(loginActivity.this, idUsuario);
                         startActivity(intent2);
                     }
 
                 } else {
-                    Intent intent3 = new Intent(loginActivity.this, registerActivity.class);
-                    startActivity(intent3);
+                    Toast.makeText(loginActivity.this, "Credenciales incorrectas. Por favor, inténtalo de nuevo o regístrate si eres un nuevo usuario.", Toast.LENGTH_SHORT).show();
                 }
 
                 cursor.close();
@@ -90,11 +94,11 @@ public class loginActivity extends AppCompatActivity {
 
     }
 
-    private void guardarDatosUsuario(String contrasena) {
-        SharedPreferences sharedPreferences = getSharedPreferences("datos_usuario", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("contrasena", contrasena);
+    public void establecerIdUsuarioActual(Context context, long idUsuario) {
+        Log.e("Miapp",String.valueOf(idUsuario));
+        SharedPreferences preferences = context.getSharedPreferences("usuario_id", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putLong("usuario_id", idUsuario);
         editor.apply();
     }
-
 }
