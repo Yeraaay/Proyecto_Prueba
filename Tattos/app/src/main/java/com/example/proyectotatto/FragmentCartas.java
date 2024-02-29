@@ -1,7 +1,6 @@
 package com.example.proyectotatto;
 
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -11,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 
 public class FragmentCartas extends Fragment {
@@ -35,7 +33,7 @@ public class FragmentCartas extends Fragment {
         ArrayList<Tatuaje> tatuajeList = dbTattos.mostrarContactos();
 
         // Crea un adaptador y configúralo con la lista de tatuajes y el tipo de fragmento
-        tatuajeAdapter = new TatuajeAdapter(tatuajeList,"FragmentCartas");
+        tatuajeAdapter = new TatuajeAdapter(tatuajeList, "FragmentCartas");
 
         // Establece el adaptador en el RecyclerView
         recyclerView.setAdapter(tatuajeAdapter);
@@ -56,6 +54,11 @@ public class FragmentCartas extends Fragment {
         }
 
         // Actualiza el adaptador con la nueva lista de tatuajes
-        tatuajeAdapter.actualizarLista(tatuajeList);
+        if (tatuajeAdapter != null) {
+            tatuajeAdapter.actualizarLista(tatuajeList);
+        } else {
+            // Si tatuajeAdapter es nulo, muestra un mensaje de advertencia
+            Toast.makeText(getContext(), "Error: Adaptador nulo", Toast.LENGTH_SHORT).show();
+        }
     }
 }

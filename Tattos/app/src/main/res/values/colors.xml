@@ -5,5 +5,6 @@
     <color name="colorGrisClaro">#EDF2F4</color>
     <color name="colorRojoClaro">#EF233C</color>
     <color name="colorRojoOscuro">#9a031e</color>
+    <color name="colorRojoMasClarito">#954D55</color>
     <color name="white">#FFFFFF</color>
 </resources>

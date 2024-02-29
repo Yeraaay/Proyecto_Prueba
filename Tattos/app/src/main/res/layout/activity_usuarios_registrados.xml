@@ -5,26 +5,48 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".invitadoActivity">
+    tools:context=".UsuariosRegistrados">
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@color/colorRojoOscuro"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:background="@color/colorRojoClaro"
+        android:gravity="center">
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="45dp"
-            android:textColor="@color/colorNegro"
-            android:layout_gravity="center"
-            android:text="Cattoo" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:orientation="vertical">
+
+            <ImageButton android:id="@+id/imageButton"
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                android:background="@color/colorRojoClaro"
+                android:src="@drawable/menu_lateral" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Cattoo"
+                android:textColor="@color/colorNegro"
+                android:textSize="45dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
@@ -52,6 +74,7 @@
                 android:scrollbars="none">
 
                 <LinearLayout
+                    android:id="@+id/layoutNav"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="bottom"
@@ -113,7 +136,7 @@
             <FrameLayout
                 android:id="@+id/fragmentContainerView2"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="552dp"
                 android:orientation="vertical"></FrameLayout>
         </LinearLayout>
     </LinearLayout>
@@ -121,8 +144,41 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="horizontal"
         android:layout_weight="1"
-        android:background="@color/colorRojoOscuro"
-        android:orientation="vertical"></LinearLayout>
+        android:background="@color/colorRojoOscuro">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/botonPedidos"
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                android:background="@color/colorRojoClaro"
+                android:src="@drawable/baseline_moped_24" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/botonCarrito"
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                android:background="@color/colorRojoClaro"
+                android:src="@drawable/baseline_shopping_cart_24" />
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>

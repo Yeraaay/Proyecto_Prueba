@@ -25,7 +25,7 @@ public class DbTattos extends DBHelper {
         if (cursorTatto.moveToFirst()) {
             do {
                 tatuaje = new Tatuaje();
-                tatuaje.setId(cursorTatto.getInt(0));
+
                 tatuaje.setNombre(cursorTatto.getString(1));
                 tatuaje.setImagen(cursorTatto.getString(2));
                 tatuaje.setPrecio(cursorTatto.getInt(3));
@@ -52,7 +52,7 @@ public class DbTattos extends DBHelper {
         if (cursorTatto.moveToFirst()) {
             do {
                 tatuaje = new Tatuaje();
-                tatuaje.setId(cursorTatto.getInt(0));
+
                 tatuaje.setNombre(cursorTatto.getString(1));
                 tatuaje.setImagen(cursorTatto.getString(2));
                 tatuaje.setPrecio(cursorTatto.getInt(3));

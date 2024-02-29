@@ -20,12 +20,11 @@
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textViewOni"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/oni1" />
+            <ImageView
+                android:id="@+id/imagen"
+                android:layout_width="204dp"
+                android:layout_height="231dp"
+                android:layout_marginTop="15dp" />
 
             <TextView
                 android:id="@+id/textViewDescripción"
@@ -37,38 +36,38 @@
                 android:textColor="@color/colorNegro"
                 android:textSize="18dp"
                 android:textStyle="bold" />
-        </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center_horizontal|center"
-            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal|center"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/textView16"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Precio: "
-                android:textSize="20dp"
-                android:layout_marginRight="30dp"
-                android:textColor="@color/colorNegro"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/textView16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:text="Precio: "
+                    android:textColor="@color/colorNegro"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/textView15"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="7dp"
-                android:text="20€"
-                android:shadowColor="@color/colorRojoOscuro"
-                android:shadowDx="0"
-                android:shadowDy="0"
-                android:shadowRadius="2"
-                android:textColor="@color/colorNegro"
-                android:textSize="45dp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/textViewPrecio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="7dp"
+                    android:shadowColor="@color/colorRojoOscuro"
+                    android:shadowDx="0"
+                    android:shadowDy="0"
+                    android:shadowRadius="2"
+                    android:text="20€"
+                    android:textColor="@color/colorNegro"
+                    android:textSize="45dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout

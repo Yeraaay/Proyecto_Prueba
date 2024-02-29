@@ -1,11 +1,11 @@
 package com.example.proyectotatto;
 
 public class Tatuaje {
-    private long id;
+    //private long id;
     private String nombre;
     private String categoria;
     private String imagen;
-    private int precio;
+    private double precio;
     private String descripcion;
 
     // Constructor
@@ -14,8 +14,8 @@ public class Tatuaje {
 
     }
 
-    public Tatuaje(long id, String nombre, String categoria, String imagen, int precio, String descripcion) {
-        this.id = id;
+    public Tatuaje(String nombre, String categoria, String imagen, double precio, String descripcion) {
+
         this.nombre = nombre;
         this.categoria = categoria;
         this.imagen = imagen;
@@ -25,13 +25,15 @@ public class Tatuaje {
 
     // Getters y setters
 
+    /*
     public long getId() {
         return id;
     }
 
     public void setId(long id) {
-        this.id = id;
+       this.id = id;
     }
+    */
 
     public String getNombre() {
         return nombre;
@@ -57,7 +59,7 @@ public class Tatuaje {
         this.imagen = imagen;
     }
 
-    public int getPrecio() {
+    public double getPrecio() {
         return precio;
     }
 

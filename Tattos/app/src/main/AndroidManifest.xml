@@ -32,5 +32,9 @@
             android:name=".invitadoActivity"
             android:exported="false">
         </activity>
+        <activity
+            android:name=".EditarPerfil"
+            android:exported="false">
+        </activity>
     </application>
 </manifest>

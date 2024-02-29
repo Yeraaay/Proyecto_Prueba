@@ -1,8 +1,8 @@
 package com.example.proyectotatto;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +23,7 @@ public class TatuajeAdapter extends RecyclerView.Adapter<TatuajeAdapter.ViewHold
     private ArrayList<Tatuaje> listaTatto;
     private String fragmentType;
 
-    public TatuajeAdapter(ArrayList<Tatuaje> listaTattos,String fragmentType) {
+    public TatuajeAdapter(ArrayList<Tatuaje> listaTattos, String fragmentType) {
         this.listaTatto = listaTattos;
         this.fragmentType = fragmentType;
     }
@@ -56,19 +56,23 @@ public class TatuajeAdapter extends RecyclerView.Adapter<TatuajeAdapter.ViewHold
             public void onClick(View v) {
                 String categoria = tatuaje.getNombre();
 
-                // Lógica condicional según el fragmento
-                if ("FragmentCartas".equals(fragmentType)) {
-                    Intent intent = new Intent(holder.itemView.getContext(), loginActivity.class);
-                    holder.itemView.getContext().startActivity(intent);
-                    Toast.makeText(holder.itemView.getContext(), "Debes iniciar sesion para continuar", Toast.LENGTH_SHORT).show();
-                } else if ("registradoFragmentCartas".equals(fragmentType) && "ONI".equals(categoria)) {
-                    // Reemplazar el fragmento actual con interiorCarta1
-                    FragmentManager fragmentManager = ((AppCompatActivity) holder.itemView.getContext()).getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.fragmentContainerView2, new InteriorCarta1());
-                    fragmentTransaction.addToBackStack(null);  // Para permitir retroceder al fragmento anterior
-                    fragmentTransaction.commit();
-                }
+                // Obtener el FragmentManager
+                FragmentManager fragmentManager = ((AppCompatActivity) holder.itemView.getContext()).getSupportFragmentManager();
+                // Iniciar una nueva transacción de fragmento
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                // Crear una instancia de InteriorCarta1
+                InteriorCarta1 interiorCarta1 = new InteriorCarta1();
+                // Crear un Bundle para pasar datos al fragmento
+                Bundle args = new Bundle();
+                // Pasar el nombre del tatuaje seleccionado al fragmento
+                args.putString("nombreTatuaje", categoria);
+                interiorCarta1.setArguments(args);
+
+                // Reemplazar el fragmento actual con InteriorCarta1
+                fragmentTransaction.replace(R.id.fragmentContainerView2, interiorCarta1);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
     }

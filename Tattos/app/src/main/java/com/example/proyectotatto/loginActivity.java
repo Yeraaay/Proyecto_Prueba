@@ -1,14 +1,20 @@
 package com.example.proyectotatto;
 
+import static android.app.PendingIntent.getActivity;
+
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -58,17 +64,26 @@ public class loginActivity extends AppCompatActivity {
 
                 if (cursor.getCount() > 0) {
                     cursor.moveToFirst();
-                    @SuppressLint("Range") String tipoUsuario = cursor.getString(cursor.getColumnIndex("Tipo"));
+                    String tipoUsuario = cursor.getString(cursor.getColumnIndexOrThrow("Tipo"));
 
                     if ("Admin".equals(tipoUsuario)) {
                         Intent intent1 = new Intent(loginActivity.this, AdminActivity.class);
                         startActivity(intent1);
                     } else if ("Registrado".equals(tipoUsuario)) {
                         Intent intent2 = new Intent(loginActivity.this, UsuariosRegistrados.class);
+                        intent2.putExtra("nombreUsuario", nombreUsuario);
+                        intent2.putExtra("contrasenaUsuario", contrasenaUsuario);
+                        @SuppressLint("Range") long idUsuario = cursor.getLong(cursor.getColumnIndex("id"));
+                        establecerIdUsuarioActual(loginActivity.this, idUsuario);
                         startActivity(intent2);
-                    }
 
+                        // Guardar el ID del usuario actual en las preferencias
+                        long usuarioId = cursor.getLong(cursor.getColumnIndexOrThrow("id"));
+                        guardarIdUsuario(usuarioId);
+                        cambiarDeCuenta(usuarioId);
+                    }
                 } else {
+                    Toast.makeText(loginActivity.this, "Credenciales incorrectas. Por favor, inténtalo de nuevo o regístrate si eres un nuevo usuario.", Toast.LENGTH_SHORT).show();
                     Intent intent3 = new Intent(loginActivity.this, registerActivity.class);
                     startActivity(intent3);
                 }
@@ -86,4 +101,25 @@ public class loginActivity extends AppCompatActivity {
         });
 
     }
+
+    private void cambiarDeCuenta(long nuevoIdUsuario) {
+        DBHelper dbHelper = new DBHelper(this);
+        dbHelper.actualizarIdUsuarioActual(this, nuevoIdUsuario);
+    }
+
+    private void guardarIdUsuario(long usuarioId) {
+        SharedPreferences sharedPreferences = getSharedPreferences("datos_usuario", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong("id", usuarioId);
+        editor.apply();
+    }
+
+    public void establecerIdUsuarioActual(Context context, long idUsuario) {
+        Log.e("Miapp",String.valueOf(idUsuario));
+        SharedPreferences preferences = context.getSharedPreferences("usuario_id", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putLong("usuario_id", idUsuario);
+        editor.apply();
+    }
+
 }
