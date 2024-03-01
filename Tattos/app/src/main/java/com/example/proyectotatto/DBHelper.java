@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
@@ -221,20 +222,33 @@ public class DBHelper extends SQLiteOpenHelper {
 
         if (usuarioId != -1) {
             try {
-                open();
-                return database.rawQuery("SELECT * FROM " + TABLE_CARRITO + " WHERE usuario_id = ?", new String[]{String.valueOf(usuarioId)});
-            } catch (Exception e) {
+                if (!database.isOpen()) {
+                    open();
+                }
+                // Agregar registro de depuración
+                Log.e("DBHelper", "Base de datos abierta");
+
+                Cursor query = database.rawQuery("SELECT * FROM " + TABLE_CARRITO + " WHERE usuario_id = ?", new String[]{String.valueOf(usuarioId)});
+                return query;
+            } catch (SQLiteException e) {
                 e.printStackTrace();
-                // Manejo de excepciones
+                // Manejar excepción específica
+                Log.e("DBHelper", "Error al ejecutar consulta SQL: " + e.getMessage());
                 return null;
             } finally {
-                close();
+                if (database.isOpen()) {
+                    close();
+                    // Agregar registro de depuración
+                    Log.d("DBHelper", "Base de datos cerrada");
+                }
             }
         } else {
             // Manejo de error, el usuario no está autenticado
             return null;
         }
     }
+
+
 
 
     public long obtenerIdDelTatuaje(String nombreTatuaje) {
@@ -438,19 +452,19 @@ public class DBHelper extends SQLiteOpenHelper {
         List<Pedido> listaPedidos = new ArrayList<>();
 
         try {
-            open();  // Abre la base de datos antes de realizar operaciones
-            SQLiteDatabase db = database;
+
 
             String query = "SELECT " +
                     "p.pedido_id, " +
-                    "GROUP_CONCAT(t.nombre) AS nombresTatuajes " +
+                    "p.nombresTatuajes " +  // Obtener directamente la columna nombresTatuajes
                     "FROM " + TABLE_PEDIDOS + " p " +
-                    "LEFT JOIN " + TABLE_PEDIDOS + " pt ON p.pedido_id = pt.pedido_id " +
-                    "LEFT JOIN " + TABLE_TATUAJES + " t ON pt.tatuaje_id = t.id " +
-                    "WHERE p.usuario_id = ? " +
-                    "GROUP BY p.pedido_id";
+                    "WHERE p.usuario_id = ? ";
 
-            try (Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(usuarioId)})) {
+
+            Log.e("miapp",query);
+
+            try (Cursor cursor = database.rawQuery(query, new String[]{String.valueOf(usuarioId)})) {
+
                 while (cursor.moveToNext()) {
                     Pedido pedido = new Pedido();
                     pedido.setNumeroPedido(cursor.getInt(cursor.getColumnIndexOrThrow("pedido_id")));
@@ -463,6 +477,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     listaPedidos.add(pedido);
                 }
             }
+            Log.e("dasd",String.valueOf(listaPedidos));
         } catch (Exception e) {
             e.printStackTrace();
             // Manejo de excepciones

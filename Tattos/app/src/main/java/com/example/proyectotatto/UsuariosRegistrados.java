@@ -19,6 +19,8 @@ public class UsuariosRegistrados extends AppCompatActivity implements OnCategori
     Button btnTodos, btnAnimales, btnCriaturas, btnPlantas, btnAnime;
     ImageButton btnPerfil, btnCarrito, btnPedidos;
     //OnMenuButtonClickListener menuBtnClickListener;
+    ImageButton botonPerfil;
+
     DrawerLayout drawerlayout;
 
     @Override
@@ -35,7 +37,7 @@ public class UsuariosRegistrados extends AppCompatActivity implements OnCategori
         btnPerfil = findViewById(R.id.imageButton);
         btnCarrito = findViewById(R.id.botonCarrito);
         btnPedidos = findViewById(R.id.botonPedidos);
-
+        botonPerfil = findViewById(R.id.botonInfo);
 
         // Manejar clics en los botones
         btnTodos.setOnClickListener(new View.OnClickListener() {
@@ -72,7 +74,16 @@ public class UsuariosRegistrados extends AppCompatActivity implements OnCategori
                 onCategoriaSelected("anime");
             }
         });
+
         btnPerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UsuariosRegistrados.this, EditarPerfil.class);
+                startActivity(intent);
+            }
+        });
+
+        botonPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(UsuariosRegistrados.this, EditarPerfil.class);
@@ -90,6 +101,8 @@ public class UsuariosRegistrados extends AppCompatActivity implements OnCategori
                 */
             }
         });
+
+
 
         btnCarrito.setOnClickListener(new View.OnClickListener() {
             @Override

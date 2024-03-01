@@ -33,18 +33,25 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_weight="1">
 
             <TextView
                 android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_width="177dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
                 android:text="Cattoo"
                 android:textColor="@color/colorNegro"
                 android:textSize="45dp"
                 android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/botonInfo"
+                android:layout_width="88dp"
+                android:layout_height="match_parent"
+                android:text="Button"
+                android:src="@drawable/baseline_info_24"/>
+
         </LinearLayout>
 
     </LinearLayout>

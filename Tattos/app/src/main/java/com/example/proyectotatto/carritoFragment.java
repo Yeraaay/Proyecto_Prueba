@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,7 @@ public class carritoFragment extends Fragment implements OnCarritoItemAddedListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_carrito, container, false);
 
-        dbHelper = new DBHelper(requireContext());
+        dbHelper = new DBHelper(getContext());
 
         // Inicializa tu RecyclerView y su adaptador
         recyclerView = root.findViewById(R.id.recyclerViewCarrito);
@@ -40,7 +41,7 @@ public class carritoFragment extends Fragment implements OnCarritoItemAddedListe
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         btnPedirProductos = root.findViewById(R.id.botonPedirProductos);
-        btnPedirProductos.setOnClickListener(new View.OnClickListener() {
+        btnPedirProductos.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pedirProductos(requireContext());
@@ -52,14 +53,14 @@ public class carritoFragment extends Fragment implements OnCarritoItemAddedListe
         long usuarioId = obtenerIdDelUsuarioActual();
 
         // Carga los tatuajes en el carrito del usuario desde la base de datos
-        cargarTatuajesEnCarrito(requireContext());
+        cargarTatuajesEnCarrito();
 
         return root;
     }
 
-    public void cargarTatuajesEnCarrito(Context context) {
-        // Obtén el ID del usuario actual
-        long usuarioId = dbHelper.obtenerIdDelUsuarioActual(context);
+    public void cargarTatuajesEnCarrito() {
+        // Obtén el ID del usuario actual usando el contexto del fragmento
+        long usuarioId = dbHelper.obtenerIdDelUsuarioActual(requireContext());
 
         if (usuarioId != -1) {
             // Utiliza la misma instancia de DBHelper para todas las operaciones
@@ -76,13 +77,15 @@ public class carritoFragment extends Fragment implements OnCarritoItemAddedListe
             }
 
             cursor.close();
-            // No cierres dbHelper aquí, ya que se cerrará en su debido momento
+            db.close(); // Cierra explícitamente la conexión de la base de datos
             carritoAdapter.notifyDataSetChanged();
         } else {
             // Manejo de error, el usuario no está autenticado
-            dbHelper.mostrarToast(context, "Error: Usuario no autenticado");
+            dbHelper.mostrarToast(requireContext(), "Error: Usuario no autenticado");
         }
     }
+
+
 
 
     @Override
@@ -94,9 +97,10 @@ public class carritoFragment extends Fragment implements OnCarritoItemAddedListe
 
     // Método para realizar la acción de "Pedir Productos"
     private void pedirProductos(Context context) {
+
         try {
             // Obtén los productos del carrito
-            List<Tatuaje> productosEnCarrito = obtenerProductosEnCarrito(requireContext());
+            List<Tatuaje> productosEnCarrito = obtenerProductosEnCarrito(context);
 
             if (!productosEnCarrito.isEmpty()) {
                 // Guarda los productos en la tabla de "Pedidos"
@@ -117,38 +121,50 @@ public class carritoFragment extends Fragment implements OnCarritoItemAddedListe
                 if (idPedido != -1) {
                     // Actualizar tu RecyclerView u otras acciones necesarias
                     actualizarVista();
-                    Toast.makeText(getContext(), "Productos pedidos correctamente", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Productos pedidos correctamente", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getContext(), "Error al crear el pedido", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Error al crear el pedido", Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Toast.makeText(getContext(), "El carrito está vacío", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "El carrito está vacío", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            dbHelper.close();
         }
     }
+
 
 
     private List<Tatuaje> obtenerProductosEnCarrito(Context context) {
         long usuarioId = obtenerIdDelUsuarioActual();
-        Cursor cursor = dbHelper.obtenerTatuajesEnCarritoPorUsuario(context);
 
+        Cursor cursor = dbHelper.obtenerTatuajesEnCarritoPorUsuario(context);
+        Log.e("Cursor", "Cursor obtenido: " + cursor);
         List<Tatuaje> productosEnCarrito = new ArrayList<>();
 
-        while (cursor.moveToNext()) {
-            long tatuajeId = cursor.getLong(cursor.getColumnIndexOrThrow("tatuaje_id"));
-            Tatuaje tatuaje = dbHelper.obtenerTatuajePorId(tatuajeId);
-            if (tatuaje != null) {
-                productosEnCarrito.add(tatuaje);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                // El cursor contiene al menos una fila de datos
+                do {
+                    long tatuajeId = cursor.getLong(cursor.getColumnIndexOrThrow("tatuaje_id"));
+                    Tatuaje tatuaje = dbHelper.obtenerTatuajePorId(tatuajeId);
+                    if (tatuaje != null) {
+                        productosEnCarrito.add(tatuaje);
+                    }
+                } while (cursor.moveToNext());
+            } else {
+                // El cursor está vacío
+                Log.d("Cursor", "El cursor está vacío");
             }
+            cursor.close();
+        } else {
+            // Manejo de un cursor nulo
+            Log.d("Cursor", "El cursor es nulo");
         }
 
-        cursor.close();
         return productosEnCarrito;
     }
+
 
     private void vaciarCarrito() {
         long usuarioId = obtenerIdDelUsuarioActual();
@@ -156,7 +172,7 @@ public class carritoFragment extends Fragment implements OnCarritoItemAddedListe
     }
 
     private void actualizarVista() {
-        cargarTatuajesEnCarrito(getContext());
+        cargarTatuajesEnCarrito();
     }
 
     private long obtenerIdDelUsuarioActual() {

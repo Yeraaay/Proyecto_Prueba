@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,13 +48,13 @@ public class PedidosFragment extends Fragment {
 
         // Obtener el ID del usuario actual, asegúrate de tener un método para obtenerlo en DBHelper
         int usuarioId = (int) dbHelper.obtenerIdDelUsuarioActual(getContext());
-
+        Log.e("miapp", String.valueOf(usuarioId));
         // Reemplaza "obtenerPedidosDelUsuario" con tu método real para obtener los pedidos del usuario
         List<Pedido> listaPedidos = dbHelper.obtenerPedidosDelUsuario(usuarioId);
-
+        Log.e("miapp", String.valueOf(listaPedidos));
         // Actualizar el adaptador con la lista de pedidos
         pedidosAdapter.setListaPedidos(listaPedidos);
-        dbHelper.close();
+
     }
 
 }
