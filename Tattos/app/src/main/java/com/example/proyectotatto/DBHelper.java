@@ -362,44 +362,25 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public long agregarPedido(Pedido pedido, long usuarioId) {
+        ContentValues values = new ContentValues();
+        values.put("usuario_id", usuarioId);
+        values.put("nombresTatuajes", TextUtils.join(",", pedido.getNombresTatuajes()));
+
         long idPedido = -1;
 
         try {
-            open();  // Abre la base de datos antes de realizar operaciones
+            open(); // Abre la base de datos antes de realizar operaciones
 
-            // Comienza una transacción
-            database.beginTransaction();
-
-            // Inserta el pedido en la tabla de pedidos
-            ContentValues values = new ContentValues();
-            values.put("usuario_id", usuarioId);
             idPedido = database.insert(TABLE_PEDIDOS, null, values);
-
-            if (idPedido != -1) {
-                // Inserta los tatuajes asociados al pedido en la tabla de pedidos
-                for (String nombreTatuaje : pedido.getNombresTatuajes()) {
-                    long tatuajeId = obtenerIdDelTatuaje(nombreTatuaje);
-                    ContentValues pedidoTatuajeValues = new ContentValues();
-                    pedidoTatuajeValues.put("pedido_id", idPedido);
-                    pedidoTatuajeValues.put("tatuaje_id", tatuajeId);
-                    database.insert(TABLE_PEDIDOS, null, pedidoTatuajeValues);
-                }
-
-                // Establece la transacción como exitosa
-                database.setTransactionSuccessful();
-            }
         } catch (Exception e) {
             e.printStackTrace();
-            // Maneja excepciones según tus necesidades
+            // Manejo de excepciones específicas si es posible
         } finally {
-            // Finaliza la transacción y cierra la base de datos
-            database.endTransaction();
-            close();  // Cierra la base de datos después de realizar operaciones
+            close(); // Cierra la base de datos después de realizar operaciones
         }
 
         return idPedido;
     }
-
 
     public Cursor obtenerPedidosPorUsuario(long usuarioId) {
         try {
@@ -452,24 +433,19 @@ public class DBHelper extends SQLiteOpenHelper {
         List<Pedido> listaPedidos = new ArrayList<>();
 
         try {
-
-
             String query = "SELECT " +
                     "p.pedido_id, " +
-                    "p.nombresTatuajes " +  // Obtener directamente la columna nombresTatuajes
+                    "p.nombresTatuajes " +
                     "FROM " + TABLE_PEDIDOS + " p " +
                     "WHERE p.usuario_id = ? ";
 
-
-            Log.e("miapp",query);
+            Log.e("miapp", query);
 
             try (Cursor cursor = database.rawQuery(query, new String[]{String.valueOf(usuarioId)})) {
-
                 while (cursor.moveToNext()) {
                     Pedido pedido = new Pedido();
                     pedido.setNumeroPedido(cursor.getInt(cursor.getColumnIndexOrThrow("pedido_id")));
 
-                    // Obtén la lista de nombres de tatuajes y agrégala al pedido
                     String nombresTatuajes = cursor.getString(cursor.getColumnIndexOrThrow("nombresTatuajes"));
                     List<String> listaNombresTatuajes = Arrays.asList(nombresTatuajes.split(","));
                     pedido.setNombresTatuajes(listaNombresTatuajes);
@@ -477,10 +453,10 @@ public class DBHelper extends SQLiteOpenHelper {
                     listaPedidos.add(pedido);
                 }
             }
-            Log.e("dasd",String.valueOf(listaPedidos));
+            Log.e("dasd", String.valueOf(listaPedidos));
         } catch (Exception e) {
             e.printStackTrace();
-            // Manejo de excepciones
+            // Manejo de excepciones específicas si es posible
         } finally {
             close();  // Cierra la base de datos después de realizar operaciones
         }
@@ -515,6 +491,38 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
         return nombresTatuajes;
+    }
+
+    public void cerrarSesion(Context context) {
+        try {
+            open(); // Abre la base de datos antes de realizar operaciones
+            SQLiteDatabase db = database;
+
+            long usuarioId = obtenerIdDelUsuarioActual(context);
+
+            if (usuarioId != -1) {
+                // Elimina al usuario de las tablas relacionadas
+                db.delete(TABLE_CARRITO, "usuario_id = ?", new String[]{String.valueOf(usuarioId)});
+                db.delete(TABLE_PEDIDOS, "usuario_id = ?", new String[]{String.valueOf(usuarioId)});
+                db.delete(TABLE_REGISTRADOS, "usuario_id = ?", new String[]{String.valueOf(usuarioId)});
+                db.delete(TABLE_USUARIOS, "id = ?", new String[]{String.valueOf(usuarioId)});
+
+                // Limpiar cualquier información adicional de sesión si es necesario
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.remove("usuario_id");
+                // ... elimina otros datos de sesión si es necesario
+                editor.apply();
+
+                // Muestra un Toast informando que se ha cerrado la sesión
+                Toast.makeText(context, "Has cerrado sesión", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Manejo de excepciones específicas si es necesario
+        } finally {
+            close(); // Cierra la base de datos después de realizar operaciones
+        }
     }
 
 
@@ -566,6 +574,11 @@ public class DBHelper extends SQLiteOpenHelper {
         if (database != null && database.isOpen()) {
             database.close();
         }
+    }
+
+    // Método para obtener una instancia de la base de datos
+    public SQLiteDatabase obtenerInstanciaBaseDatos() {
+        return getWritableDatabase();
     }
 
     public void doSomeDatabaseOperation() {

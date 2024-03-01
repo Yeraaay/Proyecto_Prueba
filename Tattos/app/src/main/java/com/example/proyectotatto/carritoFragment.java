@@ -1,7 +1,9 @@
 package com.example.proyectotatto;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -11,12 +13,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +30,12 @@ public class carritoFragment extends Fragment implements OnCarritoItemAddedListe
 
     private RecyclerView recyclerView;
     private static CarritoAdapter carritoAdapter;
-    Button btnPedirProductos;
-    DBHelper dbHelper;
+    private static DBHelper dbHelper;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_carrito, container, false);
 
-        dbHelper = new DBHelper(getContext());
+        dbHelper = new DBHelper(requireContext());
 
         // Inicializa tu RecyclerView y su adaptador
         recyclerView = root.findViewById(R.id.recyclerViewCarrito);
@@ -40,15 +44,6 @@ public class carritoFragment extends Fragment implements OnCarritoItemAddedListe
         recyclerView.setAdapter(carritoAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        btnPedirProductos = root.findViewById(R.id.botonPedirProductos);
-        btnPedirProductos.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pedirProductos(requireContext());
-                vaciarCarrito();
-                actualizarVista();
-            }
-        });
 
         long usuarioId = obtenerIdDelUsuarioActual();
 
@@ -59,33 +54,41 @@ public class carritoFragment extends Fragment implements OnCarritoItemAddedListe
     }
 
     public void cargarTatuajesEnCarrito() {
-        // Obtén el ID del usuario actual usando el contexto del fragmento
-        long usuarioId = dbHelper.obtenerIdDelUsuarioActual(requireContext());
+        Cursor cursor = null;
+        SQLiteDatabase db = null;
 
-        if (usuarioId != -1) {
-            // Utiliza la misma instancia de DBHelper para todas las operaciones
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
+        try {
+            long usuarioId = dbHelper.obtenerIdDelUsuarioActual(requireContext());
 
-            Cursor cursor = db.rawQuery("SELECT * FROM Carrito WHERE usuario_id = ?", new String[]{String.valueOf(usuarioId)});
+            if (usuarioId != -1) {
+                // Utiliza la instancia existente de DBHelper para obtener la base de datos
+                db = dbHelper.getWritableDatabase();
 
-            while (cursor.moveToNext()) {
-                long tatuajeId = cursor.getLong(cursor.getColumnIndexOrThrow("tatuaje_id"));
-                Tatuaje tatuaje = dbHelper.obtenerTatuajePorId(tatuajeId);
-                if (tatuaje != null) {
-                    carritoAdapter.addTatuaje(tatuaje);
+                cursor = db.rawQuery("SELECT * FROM Carrito WHERE usuario_id = ?", new String[]{String.valueOf(usuarioId)});
+
+                while (cursor.moveToNext()) {
+                    long tatuajeId = cursor.getLong(cursor.getColumnIndexOrThrow("tatuaje_id"));
+                    Tatuaje tatuaje = dbHelper.obtenerTatuajePorId(tatuajeId);
+                    if (tatuaje != null) {
+                        carritoAdapter.addTatuaje(tatuaje);
+                    }
                 }
-            }
 
-            cursor.close();
-            db.close(); // Cierra explícitamente la conexión de la base de datos
-            carritoAdapter.notifyDataSetChanged();
-        } else {
-            // Manejo de error, el usuario no está autenticado
-            dbHelper.mostrarToast(requireContext(), "Error: Usuario no autenticado");
+                // No cierres la base de datos aquí, ciérrala después de todas las operaciones.
+                carritoAdapter.notifyDataSetChanged();
+            } else {
+                dbHelper.mostrarToast(requireContext(), "Error: Usuario no autenticado");
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            // Cierra la base de datos después de todas las operaciones
+            if (db != null && db.isOpen()) {
+                db.close();
+            }
         }
     }
-
-
 
 
     @Override
@@ -96,43 +99,63 @@ public class carritoFragment extends Fragment implements OnCarritoItemAddedListe
     }
 
     // Método para realizar la acción de "Pedir Productos"
-    private void pedirProductos(Context context) {
-
+    // Método para realizar la acción de "Pedir Productos"
+    public void pedirProductos(final Context context) {
         try {
-            // Obtén los productos del carrito
-            List<Tatuaje> productosEnCarrito = obtenerProductosEnCarrito(context);
+            // Obtener la instancia de la base de datos
+            SQLiteDatabase db = dbHelper.obtenerInstanciaBaseDatos();
+
+            List<Tatuaje> productosEnCarrito = obtenerProductosEnCarrito(getContext());
 
             if (!productosEnCarrito.isEmpty()) {
-                // Guarda los productos en la tabla de "Pedidos"
                 long usuarioId = obtenerIdDelUsuarioActual();
 
-                // Crear un nuevo pedido
                 Pedido nuevoPedido = new Pedido();
                 nuevoPedido.setNombresTatuajes(new ArrayList<>());
 
-                // Agrega los nombres de los tatuajes al pedido
                 for (Tatuaje tatuaje : productosEnCarrito) {
                     nuevoPedido.getNombresTatuajes().add(tatuaje.getNombre());
                 }
 
-                // Agrega el pedido a la base de datos
                 long idPedido = dbHelper.agregarPedido(nuevoPedido, usuarioId);
 
                 if (idPedido != -1) {
-                    // Actualizar tu RecyclerView u otras acciones necesarias
+                    // Vacía el carrito después de realizar el pedido para evitar duplicados
+                    vaciarCarrito();
                     actualizarVista();
-                    Toast.makeText(context, "Productos pedidos correctamente", Toast.LENGTH_SHORT).show();
+
+                    // Mostrar un mensaje emergente (Snackbar) con los detalles del pedido
+                    mostrarDetallesPedido(context, nuevoPedido);
+
                 } else {
+                    Log.e("Pedido", "Error al crear el pedido");
                     Toast.makeText(context, "Error al crear el pedido", Toast.LENGTH_SHORT).show();
                 }
             } else {
+                Log.e("Pedido", "El carrito está vacío");
                 Toast.makeText(context, "El carrito está vacío", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
             e.printStackTrace();
+            Log.e("Pedido", "Error al procesar el pedido: " + e.getMessage());
+            // Capturar y mostrar excepciones
+            Toast.makeText(context, "Error al procesar el pedido", Toast.LENGTH_SHORT).show();
         }
     }
 
+    // Método para mostrar un mensaje emergente (Snackbar) con los detalles del pedido
+    private void mostrarDetallesPedido(Context context, Pedido pedido) {
+        StringBuilder mensaje = new StringBuilder();
+        mensaje.append("Pedido realizado con éxito.\nDetalles del pedido:\n");
+
+        // Agregar los detalles del pedido al mensaje
+        mensaje.append("Número de pedido: ").append(pedido.getNumeroPedido()).append("\n");
+        mensaje.append("Tatuajes pedidos: ").append(TextUtils.join(", ", pedido.getNombresTatuajes())).append("\n");
+
+        // Mostrar un Snackbar con los detalles del pedido
+        View rootView = getActivity().getWindow().getDecorView().findViewById(android.R.id.content);
+        Snackbar.make(rootView, mensaje.toString(), Snackbar.LENGTH_LONG).show();
+    }
 
 
     private List<Tatuaje> obtenerProductosEnCarrito(Context context) {
@@ -142,9 +165,8 @@ public class carritoFragment extends Fragment implements OnCarritoItemAddedListe
         Log.e("Cursor", "Cursor obtenido: " + cursor);
         List<Tatuaje> productosEnCarrito = new ArrayList<>();
 
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                // El cursor contiene al menos una fila de datos
+        try {
+            if (cursor != null && cursor.moveToFirst()) {
                 do {
                     long tatuajeId = cursor.getLong(cursor.getColumnIndexOrThrow("tatuaje_id"));
                     Tatuaje tatuaje = dbHelper.obtenerTatuajePorId(tatuajeId);
@@ -153,13 +175,15 @@ public class carritoFragment extends Fragment implements OnCarritoItemAddedListe
                     }
                 } while (cursor.moveToNext());
             } else {
-                // El cursor está vacío
                 Log.d("Cursor", "El cursor está vacío");
             }
-            cursor.close();
-        } else {
-            // Manejo de un cursor nulo
-            Log.d("Cursor", "El cursor es nulo");
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Manejo de excepciones específicas si es posible
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
 
         return productosEnCarrito;

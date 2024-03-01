@@ -4,7 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginBottom="16dp">
 
     <!-- Campo de entrada para el nombre del usuario -->
     <EditText
@@ -21,11 +26,21 @@
         android:layout_marginBottom="8dp"/>
 
     <!-- Botón para guardar los cambios -->
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonGuardar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorRojoOscuro"
-        android:text="Guardar" />
+        android:background="@drawable/boton_custom1"
+        android:text="Guardar"
+        android:layout_marginTop="16dp"/>
+
+    <!-- Botón para cerrar sesión -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonCerrarSesion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:background="@drawable/boton_custom1"
+        android:text="Cerrar Sesión" />
 
 </LinearLayout>

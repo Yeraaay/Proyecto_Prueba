@@ -4,12 +4,14 @@ import static com.example.proyectotatto.DBHelper.TABLE_USUARIOS;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -21,7 +23,7 @@ public class EditarPerfil extends AppCompatActivity {
 
     private EditText editTextName;
     private EditText editTextPassword;
-    private Button buttonGuardar;
+    private Button buttonGuardar, btnCerrarSesion;
 
     private SQLiteDatabase mDatabase;
 
@@ -33,6 +35,13 @@ public class EditarPerfil extends AppCompatActivity {
         editTextName = findViewById(R.id.editTextName);
         editTextPassword = findViewById(R.id.editTextPassword);
         buttonGuardar = findViewById(R.id.buttonGuardar);
+        btnCerrarSesion = findViewById(R.id.buttonCerrarSesion);
+        btnCerrarSesion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cerrarSesion();
+            }
+        });
 
         // Inicializar la base de datos
         DBHelper dbHelper = new DBHelper(this);
@@ -75,6 +84,16 @@ public class EditarPerfil extends AppCompatActivity {
             // No se pudo obtener la ID del usuario actual
             Toast.makeText(this, "Error: No se pudo obtener el ID del usuario actual", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void cerrarSesion() {
+        DBHelper dbHelper = new DBHelper(this);
+        dbHelper.cerrarSesion(this);
+        dbHelper.close();
+
+        Intent intent = new Intent(this, loginActivity.class);
+        startActivity(intent);
+        finish(); // Cierra la actividad actual para evitar que el usuario retroceda a la pantalla anterior.
     }
 
 

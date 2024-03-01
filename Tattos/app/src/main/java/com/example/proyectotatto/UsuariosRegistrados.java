@@ -17,7 +17,7 @@ import androidx.fragment.app.FragmentTransaction;
 public class UsuariosRegistrados extends AppCompatActivity implements OnCategoriaSelectedListener {
 
     Button btnTodos, btnAnimales, btnCriaturas, btnPlantas, btnAnime;
-    ImageButton btnPerfil, btnCarrito, btnPedidos;
+    ImageButton btnCarrito;
     //OnMenuButtonClickListener menuBtnClickListener;
     ImageButton botonPerfil;
 
@@ -34,9 +34,7 @@ public class UsuariosRegistrados extends AppCompatActivity implements OnCategori
         btnCriaturas = findViewById(R.id.botonCategoriaCriaturas);
         btnPlantas = findViewById(R.id.botonCategoriaPlantas);
         btnAnime = findViewById(R.id.botonCategoriaAnime);
-        btnPerfil = findViewById(R.id.imageButton);
         btnCarrito = findViewById(R.id.botonCarrito);
-        btnPedidos = findViewById(R.id.botonPedidos);
         botonPerfil = findViewById(R.id.botonInfo);
 
         // Manejar clics en los botones
@@ -75,30 +73,12 @@ public class UsuariosRegistrados extends AppCompatActivity implements OnCategori
             }
         });
 
-        btnPerfil.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(UsuariosRegistrados.this, EditarPerfil.class);
-                startActivity(intent);
-            }
-        });
 
         botonPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(UsuariosRegistrados.this, EditarPerfil.class);
                 startActivity(intent);
-            }
-        });
-
-        btnPerfil.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*
-                if (menuBtnClickListener != null) {
-                    menuBtnClickListener.onMenuButtonClicked();
-                }
-                */
             }
         });
 
@@ -111,12 +91,6 @@ public class UsuariosRegistrados extends AppCompatActivity implements OnCategori
             }
         });
 
-        btnPedidos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replaceFragment(new PedidosFragment());
-            }
-        });
 
         // Mostrar el fragmento inicial solo si savedInstanceState es nulo
         if (savedInstanceState == null) {
