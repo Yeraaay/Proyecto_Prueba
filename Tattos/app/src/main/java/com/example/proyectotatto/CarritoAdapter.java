@@ -106,6 +106,11 @@ public class CarritoAdapter extends RecyclerView.Adapter<CarritoAdapter.ViewHold
         notifyItemRemoved(posicion);
     }
 
+    public void clear() {
+        listaTatuajes.clear();
+        notifyDataSetChanged();
+    }
+
     public void setDbHelper(DBHelper dbHelper) {
         this.dbHelper = dbHelper;
     }

@@ -1,6 +1,8 @@
 package com.example.proyectotatto;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +18,7 @@ public class UsuariosRegistrados extends AppCompatActivity implements OnCategori
 
     Button btnTodos, btnAnimales, btnCriaturas, btnPlantas, btnAnime;
     ImageButton btnPerfil, btnCarrito, btnPedidos;
-    OnMenuButtonClickListener menuBtnClickListener;
+    //OnMenuButtonClickListener menuBtnClickListener;
     DrawerLayout drawerlayout;
 
     @Override
@@ -81,9 +83,11 @@ public class UsuariosRegistrados extends AppCompatActivity implements OnCategori
         btnPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*
                 if (menuBtnClickListener != null) {
                     menuBtnClickListener.onMenuButtonClicked();
                 }
+                */
             }
         });
 
@@ -139,6 +143,7 @@ public class UsuariosRegistrados extends AppCompatActivity implements OnCategori
 }
 
 
+/*
     public void setOnMenuButtonClickListener(OnMenuButtonClickListener listener) {
         this.menuBtnClickListener = listener;
     }
@@ -146,5 +151,6 @@ public class UsuariosRegistrados extends AppCompatActivity implements OnCategori
     public interface OnMenuButtonClickListener {
         void onMenuButtonClicked();
     }
+ */
 
-}
+

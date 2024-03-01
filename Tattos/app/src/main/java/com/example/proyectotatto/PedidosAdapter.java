@@ -1,6 +1,7 @@
 package com.example.proyectotatto;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +64,7 @@ public class PedidosAdapter extends RecyclerView.Adapter<PedidosAdapter.ViewHold
             }
 
             listaTatuajesTextView.setText(tatuajesText.toString());
+            listaTatuajesTextView.setText(TextUtils.join(", ", pedido.getNombresTatuajes()));
         }
     }
 

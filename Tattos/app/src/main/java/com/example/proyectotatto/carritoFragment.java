@@ -24,7 +24,7 @@ public class carritoFragment extends Fragment implements OnCarritoItemAddedListe
 
     private RecyclerView recyclerView;
     private static CarritoAdapter carritoAdapter;
-    static Button btnPedirProductos;
+    Button btnPedirProductos;
     DBHelper dbHelper;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,11 +44,12 @@ public class carritoFragment extends Fragment implements OnCarritoItemAddedListe
             @Override
             public void onClick(View v) {
                 pedirProductos(requireContext());
+                vaciarCarrito();
+                actualizarVista();
             }
         });
 
-        // Obtén el ID del usuario actual (puedes ajustar esto según tu lógica de autenticación)
-        long usuarioId = obtenerIdDelUsuarioActual(requireContext());
+        long usuarioId = obtenerIdDelUsuarioActual();
 
         // Carga los tatuajes en el carrito del usuario desde la base de datos
         cargarTatuajesEnCarrito(requireContext());
@@ -57,28 +58,32 @@ public class carritoFragment extends Fragment implements OnCarritoItemAddedListe
     }
 
     public void cargarTatuajesEnCarrito(Context context) {
-        DBHelper dbHelper = new DBHelper(context);
+        // Obtén el ID del usuario actual
+        long usuarioId = dbHelper.obtenerIdDelUsuarioActual(context);
 
-        // Asegúrate de que estás usando el contexto pasado como parámetro
-        Cursor cursor = dbHelper.obtenerTatuajesEnCarritoPorUsuario(context);
+        if (usuarioId != -1) {
+            // Utiliza la misma instancia de DBHelper para todas las operaciones
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        while (cursor.moveToNext()) {
-            long tatuajeId = cursor.getLong(cursor.getColumnIndexOrThrow("tatuaje_id"));
-            Tatuaje tatuaje = dbHelper.obtenerTatuajePorId(tatuajeId);
-            if (tatuaje != null) {
-                carritoAdapter.addTatuaje(tatuaje);
+            Cursor cursor = db.rawQuery("SELECT * FROM Carrito WHERE usuario_id = ?", new String[]{String.valueOf(usuarioId)});
+
+            while (cursor.moveToNext()) {
+                long tatuajeId = cursor.getLong(cursor.getColumnIndexOrThrow("tatuaje_id"));
+                Tatuaje tatuaje = dbHelper.obtenerTatuajePorId(tatuajeId);
+                if (tatuaje != null) {
+                    carritoAdapter.addTatuaje(tatuaje);
+                }
             }
+
+            cursor.close();
+            // No cierres dbHelper aquí, ya que se cerrará en su debido momento
+            carritoAdapter.notifyDataSetChanged();
+        } else {
+            // Manejo de error, el usuario no está autenticado
+            dbHelper.mostrarToast(context, "Error: Usuario no autenticado");
         }
-
-        cursor.close();
-        dbHelper.close();
-        carritoAdapter.notifyDataSetChanged();
     }
 
-
-    private long obtenerIdDelUsuarioActual(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getLong("id", -1);
-    }
 
     @Override
     public void onCarritoItemAdded(Tatuaje tatuaje) {
@@ -89,14 +94,13 @@ public class carritoFragment extends Fragment implements OnCarritoItemAddedListe
 
     // Método para realizar la acción de "Pedir Productos"
     private void pedirProductos(Context context) {
-        DBHelper dbHelper = new DBHelper(context);
         try {
             // Obtén los productos del carrito
             List<Tatuaje> productosEnCarrito = obtenerProductosEnCarrito(requireContext());
 
             if (!productosEnCarrito.isEmpty()) {
                 // Guarda los productos en la tabla de "Pedidos"
-                long usuarioId = obtenerIdDelUsuarioActual(); // Asegúrate de tener el método obtenerIdDelUsuarioActual implementado
+                long usuarioId = obtenerIdDelUsuarioActual();
 
                 // Crear un nuevo pedido
                 Pedido nuevoPedido = new Pedido();
@@ -156,8 +160,6 @@ public class carritoFragment extends Fragment implements OnCarritoItemAddedListe
     }
 
     private long obtenerIdDelUsuarioActual() {
-        // Implementa la lógica para obtener el ID del usuario actual
-        // Puedes utilizar el método dbHelper.obtenerIdDelUsuarioActual()
         return dbHelper.obtenerIdDelUsuarioActual(getContext());
     }
 

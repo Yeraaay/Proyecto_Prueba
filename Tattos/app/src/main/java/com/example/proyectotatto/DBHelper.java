@@ -6,6 +6,7 @@ import android.content.Context;
 
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.preference.PreferenceManager;
@@ -18,6 +19,7 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class DBHelper extends SQLiteOpenHelper {
 
@@ -31,6 +33,9 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String TABLE_CARRITO = "Carrito";
     private static final String TABLE_PEDIDOS = "Pedidos";
     private Context mContext;
+
+    private SQLiteDatabase database;
+    private final ReentrantLock databaseLock = new ReentrantLock();
 
 
     public DBHelper(@Nullable Context context) {
@@ -82,10 +87,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 "FOREIGN KEY (carrito_id) REFERENCES " + TABLE_CARRITO + "(id))");
 
         db.execSQL("CREATE TABLE " + TABLE_PEDIDOS + " (" +
-                "pedido_id" + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "tatuaje_id" + " INTEGER," +
-                "usuario_id" + " INTEGER," +
-                "nombresTatuajes" + " TEXT);");
+                "pedido_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "tatuaje_id INTEGER," +
+                "usuario_id INTEGER," +
+                "nombresTatuajes TEXT);");
 
         //Criatura
         ContentValues valuesTatuaje1 = new ContentValues();
@@ -192,15 +197,18 @@ public class DBHelper extends SQLiteOpenHelper {
         long usuarioId = obtenerIdDelUsuarioActual(context);
 
         if (usuarioId != -1) {
-            try (SQLiteDatabase db = this.getWritableDatabase()) {
+            try {
+                open();
                 ContentValues values = new ContentValues();
                 values.put("tatuaje_id", tatuajeId);
                 values.put("usuario_id", usuarioId);
-                return db.insert(TABLE_CARRITO, null, values);
+                return database.insert(TABLE_CARRITO, null, values);
             } catch (Exception e) {
                 e.printStackTrace();
                 // Manejo de excepciones
                 return -1;
+            } finally {
+                close();
             }
         } else {
             // Manejo de error, el usuario no está autenticado
@@ -209,31 +217,57 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public Cursor obtenerTatuajesEnCarritoPorUsuario(Context context) {
-        SQLiteDatabase db = this.getReadableDatabase();
+        long usuarioId = obtenerIdDelUsuarioActual(context);
 
-        try {
-            long usuarioId = obtenerIdDelUsuarioActual(context);
-            return db.rawQuery("SELECT * FROM " + TABLE_CARRITO + " WHERE usuario_id = ?", new String[]{String.valueOf(usuarioId)});
-        } catch (Exception e) {
-            e.printStackTrace();
-            // Manejo de excepciones
+        if (usuarioId != -1) {
+            try {
+                open();
+                return database.rawQuery("SELECT * FROM " + TABLE_CARRITO + " WHERE usuario_id = ?", new String[]{String.valueOf(usuarioId)});
+            } catch (Exception e) {
+                e.printStackTrace();
+                // Manejo de excepciones
+                return null;
+            } finally {
+                close();
+            }
+        } else {
+            // Manejo de error, el usuario no está autenticado
             return null;
         }
     }
 
 
     public long obtenerIdDelTatuaje(String nombreTatuaje) {
-        SQLiteDatabase db = this.getReadableDatabase();
         long tatuajeId = -1;
 
-        Cursor cursor = db.rawQuery("SELECT id FROM " + TABLE_TATUAJES + " WHERE nombre = ?", new String[]{nombreTatuaje});
+        try {
+            open();  // Abre la base de datos antes de realizar operaciones
 
-        if (cursor.moveToFirst()) {
-            tatuajeId = cursor.getLong(cursor.getColumnIndexOrThrow("id"));
+            String[] projection = {"id"};
+            String selection = "nombre = ?";
+            String[] selectionArgs = {nombreTatuaje};
+
+            Cursor cursor = database.query(
+                    TABLE_TATUAJES,
+                    projection,
+                    selection,
+                    selectionArgs,
+                    null,
+                    null,
+                    null
+            );
+
+            if (cursor.moveToFirst()) {
+                tatuajeId = cursor.getLong(cursor.getColumnIndexOrThrow("id"));
+            }
+
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Manejo de excepciones
+        } finally {
+            close();  // Cierra la base de datos después de realizar operaciones
         }
-
-        cursor.close();
-        db.close();
 
         return tatuajeId;
     }
@@ -265,60 +299,67 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     public Tatuaje obtenerTatuajePorId(long tatuajeId) {
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        String[] projection = {
-                "id",
-                "nombre",
-                "imagen_resource_id",
-                "precio",
-                "descripcion",
-                "categoria"
-        };
-
-        String selection = "id = ?";
-        String[] selectionArgs = {String.valueOf(tatuajeId)};
-
-        Cursor cursor = db.query(
-                TABLE_TATUAJES,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                null
-        );
-
         Tatuaje tatuaje = null;
 
-        if (cursor.moveToFirst()) {
-            String nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre"));
-            String imagenResourceId = cursor.getString(cursor.getColumnIndexOrThrow("imagen_resource_id"));
-            double precio = cursor.getDouble(cursor.getColumnIndexOrThrow("precio"));
-            String descripcion = cursor.getString(cursor.getColumnIndexOrThrow("descripcion"));
-            String categoria = cursor.getString(cursor.getColumnIndexOrThrow("categoria"));
+        try {
+            open();  // Abre la base de datos antes de realizar operaciones
 
-            tatuaje = new Tatuaje(nombre, categoria, imagenResourceId, precio, descripcion);
+            String[] projection = {
+                    "id",
+                    "nombre",
+                    "imagen_resource_id",
+                    "precio",
+                    "descripcion",
+                    "categoria"
+            };
+
+            String selection = "id = ?";
+            String[] selectionArgs = {String.valueOf(tatuajeId)};
+
+            Cursor cursor = database.query(
+                    TABLE_TATUAJES,
+                    projection,
+                    selection,
+                    selectionArgs,
+                    null,
+                    null,
+                    null
+            );
+
+            if (cursor.moveToFirst()) {
+                String nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre"));
+                String imagenResourceId = cursor.getString(cursor.getColumnIndexOrThrow("imagen_resource_id"));
+                double precio = cursor.getDouble(cursor.getColumnIndexOrThrow("precio"));
+                String descripcion = cursor.getString(cursor.getColumnIndexOrThrow("descripcion"));
+                String categoria = cursor.getString(cursor.getColumnIndexOrThrow("categoria"));
+
+                tatuaje = new Tatuaje(nombre, categoria, imagenResourceId, precio, descripcion);
+            }
+
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Manejo de excepciones
+        } finally {
+            close();  // Cierra la base de datos después de realizar operaciones
         }
-
-        cursor.close();
-        db.close();
 
         return tatuaje;
     }
 
     public long agregarPedido(Pedido pedido, long usuarioId) {
         long idPedido = -1;
-        SQLiteDatabase db = this.getWritableDatabase();
 
         try {
+            open();  // Abre la base de datos antes de realizar operaciones
+
             // Comienza una transacción
-            db.beginTransaction();
+            database.beginTransaction();
 
             // Inserta el pedido en la tabla de pedidos
             ContentValues values = new ContentValues();
             values.put("usuario_id", usuarioId);
-            idPedido = db.insert(TABLE_PEDIDOS, null, values);
+            idPedido = database.insert(TABLE_PEDIDOS, null, values);
 
             if (idPedido != -1) {
                 // Inserta los tatuajes asociados al pedido en la tabla de pedidos
@@ -327,19 +368,19 @@ public class DBHelper extends SQLiteOpenHelper {
                     ContentValues pedidoTatuajeValues = new ContentValues();
                     pedidoTatuajeValues.put("pedido_id", idPedido);
                     pedidoTatuajeValues.put("tatuaje_id", tatuajeId);
-                    db.insert(TABLE_PEDIDOS, null, pedidoTatuajeValues);
+                    database.insert(TABLE_PEDIDOS, null, pedidoTatuajeValues);
                 }
 
                 // Establece la transacción como exitosa
-                db.setTransactionSuccessful();
+                database.setTransactionSuccessful();
             }
         } catch (Exception e) {
-            // Maneja excepciones según tus necesidades
             e.printStackTrace();
+            // Maneja excepciones según tus necesidades
         } finally {
             // Finaliza la transacción y cierra la base de datos
-            db.endTransaction();
-            db.close();
+            database.endTransaction();
+            close();  // Cierra la base de datos después de realizar operaciones
         }
 
         return idPedido;
@@ -347,45 +388,65 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     public Cursor obtenerPedidosPorUsuario(long usuarioId) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_PEDIDOS + " WHERE usuario_id = ?",
-                new String[]{String.valueOf(usuarioId)});
-        db.close();
-        return cursor;
+        try {
+            open();  // Abre la base de datos antes de realizar operaciones
+            SQLiteDatabase db = database;
+
+            return db.rawQuery("SELECT * FROM " + TABLE_PEDIDOS + " WHERE usuario_id = ?",
+                    new String[]{String.valueOf(usuarioId)});
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Maneja excepciones según tus necesidades
+            return null;
+        }
     }
 
     public void eliminarTodosTatuajesEnCarritoPorUsuario(long usuarioId) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            open();  // Abre la base de datos antes de realizar operaciones
+            SQLiteDatabase db = database;
 
-        db.delete(TABLE_CARRITO, "usuario_id = ?", new String[]{String.valueOf(usuarioId)});
-
-        db.close();
+            db.delete(TABLE_CARRITO, "usuario_id = ?", new String[]{String.valueOf(usuarioId)});
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Maneja excepciones según tus necesidades
+        } finally {
+            close();  // Cierra la base de datos después de realizar operaciones
+        }
     }
 
     public void eliminarTatuajeDelCarrito(long tatuajeId, long usuarioId) {
-        SQLiteDatabase db = getWritableDatabase();
+        try {
+            open();  // Abre la base de datos antes de realizar operaciones
+            SQLiteDatabase db = database;
 
-        // Define la cláusula WHERE para seleccionar el tatuaje por su id y el usuario
-        String selection = "tatuaje_id = ? AND usuario_id = ?";
-        String[] selectionArgs = {String.valueOf(tatuajeId), String.valueOf(usuarioId)};
+            // Define la cláusula WHERE para seleccionar el tatuaje por su id y el usuario
+            String selection = "tatuaje_id = ? AND usuario_id = ?";
+            String[] selectionArgs = {String.valueOf(tatuajeId), String.valueOf(usuarioId)};
 
-        // Elimina el tatuaje del carrito
-        db.delete("Carrito", selection, selectionArgs);
-
-        // Cierra la conexión a la base de datos
-        db.close();
+            // Elimina el tatuaje del carrito
+            db.delete(TABLE_CARRITO, selection, selectionArgs);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Maneja excepciones según tus necesidades
+        } finally {
+            close();  // Cierra la base de datos después de realizar operaciones
+        }
     }
 
     public List<Pedido> obtenerPedidosDelUsuario(long usuarioId) {
         List<Pedido> listaPedidos = new ArrayList<>();
 
-        try (SQLiteDatabase db = this.getReadableDatabase()) {
+        try {
+            open();  // Abre la base de datos antes de realizar operaciones
+            SQLiteDatabase db = database;
+
             String query = "SELECT " +
                     "p.pedido_id, " +
-                    "GROUP_CONCAT(t.nombreTatuaje) AS nombresTatuajes " +
+                    "GROUP_CONCAT(t.nombre) AS nombresTatuajes " +
                     "FROM " + TABLE_PEDIDOS + " p " +
                     "LEFT JOIN " + TABLE_PEDIDOS + " pt ON p.pedido_id = pt.pedido_id " +
-                    "LEFT JOIN " + TABLE_TATUAJES + " t ON pt.tatuaje_id = t.tatuaje_id " +
+                    "LEFT JOIN " + TABLE_TATUAJES + " t ON pt.tatuaje_id = t.id " +
                     "WHERE p.usuario_id = ? " +
                     "GROUP BY p.pedido_id";
 
@@ -405,6 +466,8 @@ public class DBHelper extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
             // Manejo de excepciones
+        } finally {
+            close();  // Cierra la base de datos después de realizar operaciones
         }
 
         return listaPedidos;
@@ -414,16 +477,27 @@ public class DBHelper extends SQLiteOpenHelper {
     private List<String> obtenerNombresTatuajesPorPedido(int pedidoId) {
         List<String> nombresTatuajes = new ArrayList<>();
 
-        SQLiteDatabase db = getReadableDatabase();
-        String query = "SELECT nombreTatuaje FROM Pedidos WHERE pedido_id = ?";
-        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(pedidoId)});
+        try {
+            open();  // Abre la base de datos antes de realizar operaciones
+            SQLiteDatabase db = database;
 
-        while (cursor.moveToNext()) {
-            nombresTatuajes.add(cursor.getString(cursor.getColumnIndexOrThrow("nombreTatuaje")));
+            String query = "SELECT t.nombre " +
+                    "FROM " + TABLE_PEDIDOS + " p " +
+                    "LEFT JOIN " + TABLE_PEDIDOS + " pt ON p.pedido_id = pt.pedido_id " +
+                    "LEFT JOIN " + TABLE_TATUAJES + " t ON pt.tatuaje_id = t.id " +
+                    "WHERE p.pedido_id = ?";
+
+            try (Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(pedidoId)})) {
+                while (cursor.moveToNext()) {
+                    nombresTatuajes.add(cursor.getString(cursor.getColumnIndexOrThrow("nombre")));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Manejo de excepciones
+        } finally {
+            close();  // Cierra la base de datos después de realizar operaciones
         }
-
-        cursor.close();
-        db.close();
 
         return nombresTatuajes;
     }
@@ -435,12 +509,56 @@ public class DBHelper extends SQLiteOpenHelper {
         if (oldVersion < 2) {
             // Ejecuta las consultas de actualización necesarias
             db.execSQL("ALTER TABLE " + TABLE_REGISTRADOS + " ADD COLUMN nuevaColumna TEXT;");
-        
-            // Agrega la columna para el identificador único del carrito
-            db.execSQL("ALTER TABLE " + TABLE_CARRITO + " ADD COLUMN carrito_id INTEGER;");
+
+            // Agrega la columna para el identificador único del carrito si no existe
+            if (!columnExists(db, TABLE_CARRITO, "carrito_id")) {
+                db.execSQL("ALTER TABLE " + TABLE_CARRITO + " ADD COLUMN carrito_id INTEGER;");
+            }
         }
 
         // Siempre asegúrate de llamar al onCreate al final para recrear la tabla si es necesario
         onCreate(db);
     }
+
+    // Método auxiliar para verificar si una columna existe en una tabla
+    private boolean columnExists(SQLiteDatabase db, String tableName, String columnName) {
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery("PRAGMA table_info(" + tableName + ")", null);
+            if (cursor != null) {
+                while (cursor.moveToNext()) {
+                    String currentColumnName = cursor.getString(cursor.getColumnIndexOrThrow("name"));
+                    if (columnName.equals(currentColumnName)) {
+                        return true;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return false;
     }
+
+    public void open() throws SQLException {
+        database = getWritableDatabase();
+    }
+
+    public void close() {
+        if (database != null && database.isOpen()) {
+            database.close();
+        }
+    }
+
+    public void doSomeDatabaseOperation() {
+        databaseLock.lock();
+        try {
+
+        } finally {
+            databaseLock.unlock();
+        }
+    }
+}

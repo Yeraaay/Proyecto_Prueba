@@ -53,6 +53,7 @@ public class PedidosFragment extends Fragment {
 
         // Actualizar el adaptador con la lista de pedidos
         pedidosAdapter.setListaPedidos(listaPedidos);
+        dbHelper.close();
     }
 
 }

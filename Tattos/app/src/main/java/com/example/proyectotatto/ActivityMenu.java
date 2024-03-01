@@ -52,12 +52,14 @@ public class ActivityMenu extends AppCompatActivity implements NavigationView.On
         drawerLayout.addView(usuariosRegistradosLayout);
 
         UsuariosRegistrados usuariosRegistrados = new UsuariosRegistrados();
+        /*
         usuariosRegistrados.setOnMenuButtonClickListener(new UsuariosRegistrados.OnMenuButtonClickListener() {
             @Override
             public void onMenuButtonClicked() {
                 Log.d("ActivityMenu", "onMenuButtonClicked");
             }
         });
+        */
 
         // Obtener referencia al ImageButton desde el layout inflado
         ImageButton imageButton = usuariosRegistradosLayout.findViewById(R.id.imageButton);
